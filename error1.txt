@@ -1,0 +1,1592 @@
+{
+    "data": {
+        "id": 1588,
+        "external_id": "9fefac5f-2591-4111-8e3f-1ebbf29f7c8a",
+        "identifier": "COT-1588",
+        "date_of_issue": "2026-05-15",
+        "pdf_a4_filename": "https://volperseal.goldensystem.com.pe/print/quotation/9fefac5f-2591-4111-8e3f-1ebbf29f7c8a/a4/COT-1588-20260515.pdf",
+        "pdf_a4_data": {
+            "filename_only": "COT-1588-20260515",
+            "extension_only": "pdf"
+        },
+        "quotation": {
+            "id": 1588,
+            "user_id": 8,
+            "seller_id": 8,
+            "external_id": "9fefac5f-2591-4111-8e3f-1ebbf29f7c8a",
+            "establishment_id": 1,
+            "establishment": {
+                "country_id": "PE",
+                "country": {
+                    "id": "PE",
+                    "description": "PERU"
+                },
+                "department_id": "15",
+                "department": {
+                    "id": "15",
+                    "description": "LIMA"
+                },
+                "province_id": "1501",
+                "province": {
+                    "id": "1501",
+                    "description": "Lima"
+                },
+                "district_id": "150118",
+                "district": {
+                    "id": "150118",
+                    "description": "Lurigancho"
+                },
+                "urbanization": null,
+                "address": "URB. ALAMEDA DE HUACHIPA CAL. A MZ F LT 4",
+                "email": "volperseal@gmail.com",
+                "telephone": "-",
+                "code": "0000",
+                "trade_address": null,
+                "web_address": null,
+                "aditional_information": "REF: PARADERO TUMI",
+                "logo": null
+            },
+            "soap_type_id": "02",
+            "state_type_id": "01",
+            "prefix": "COT",
+            "date_of_issue": "2026-05-15 00:00:00",
+            "time_of_issue": "11:08:34",
+            "date_of_due": null,
+            "delivery_date": null,
+            "customer_id": 23,
+            "customer": {
+                "identity_document_type_id": "6",
+                "identity_document_type": {
+                    "id": "6",
+                    "description": "RUC"
+                },
+                "number": "20612114987",
+                "name": "UNIVERSO INDUSTRIAL HIDRA L& A",
+                "trade_name": null,
+                "country_id": "PE",
+                "country": {
+                    "id": "PE",
+                    "description": "PERU"
+                },
+                "department_id": "15",
+                "department": {
+                    "id": "15",
+                    "description": "LIMA"
+                },
+                "province_id": "1501",
+                "province": {
+                    "id": "1501",
+                    "description": "Lima"
+                },
+                "district_id": "150118",
+                "district": {
+                    "id": "150118",
+                    "description": "Lurigancho"
+                },
+                "address": "AV. LAS TORRES LT. 3 C.P. HUACHIPA",
+                "email": null,
+                "telephone": null,
+                "perception_agent": false,
+                "address_id": 265,
+                "internal_code": null,
+                "address_type_id": null,
+                "address_type": {
+                    "id": null,
+                    "description": null
+                },
+                "observation": null
+            },
+            "shipping_address": null,
+            "currency_type_id": "PEN",
+            "payment_method_type_id": "10",
+            "exchange_rate_sale": "3.419",
+            "total_prepayment": "0.00",
+            "total_charge": "0.00",
+            "total_discount": "0.00",
+            "total_exportation": "0.00",
+            "total_free": "0.00",
+            "total_taxed": "215.49",
+            "total_unaffected": "0.00",
+            "total_exonerated": "0.00",
+            "total_igv": "38.80",
+            "total_igv_free": "0.00",
+            "total_base_isc": "0.00",
+            "total_isc": "0.00",
+            "total_base_other_taxes": "0.00",
+            "total_other_taxes": "0.00",
+            "total_taxes": "38.80",
+            "total_value": "215.49",
+            "subtotal": "254.29",
+            "total": "254.29",
+            "charges": {},
+            "discounts": {},
+            "prepayments": null,
+            "guides": {},
+            "related": null,
+            "perception": null,
+            "detraction": null,
+            "legends": null,
+            "filename": "COT-1588-20260515",
+            "terms_condition": null,
+            "referential_information": null,
+            "account_number": null,
+            "phone": null,
+            "contact": null,
+            "changed": 0,
+            "sale_opportunity_id": null,
+            "created_at": "2026-05-15 10:41:02",
+            "updated_at": "2026-05-15 11:09:20",
+            "description": null,
+            "type_device": "web",
+            "dcto_monto_input": "0.00",
+            "monto_pagar_sin_dcto": "254.29",
+            "dcto_totales_input": "0.00",
+            "rounding": "0.00",
+            "payments": [],
+            "items": [
+                {
+                    "id": 75601,
+                    "quotation_id": 1588,
+                    "item_id": 525,
+                    "item": {
+                        "id": 525,
+                        "item_code": null,
+                        "full_description": "1-290606 - UNION ARMADA M6 -",
+                        "model": null,
+                        "brand": null,
+                        "text_filter": "UNION ARMADA M6 1-290606 1-290606 UNION ARMADA",
+                        "stock_by_extra": {
+                            "total": -1733,
+                            "CatItemStatus": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitBusiness": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldCavity": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemPackageMeasurement": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitsPerPackage": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldProperty": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemProductFamily": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "colors": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemSize": {
+                                "detailed": [],
+                                "total": null
+                            }
+                        },
+                        "warehouse_description": "Almacén - Almacén principal",
+                        "extra": {
+                            "colors": null,
+                            "CatItemUnitsPerPackage": null,
+                            "CatItemMoldProperty": null,
+                            "CatItemProductFamily": null,
+                            "CatItemMoldCavity": null,
+                            "CatItemPackageMeasurement": null,
+                            "CatItemStatus": null,
+                            "CatItemSize": null,
+                            "CatItemUnitBusiness": null
+                        },
+                        "category": "UNION ARMADA",
+                        "stock": "404.0000",
+                        "internal_id": "1-290606",
+                        "description": "UNION ARMADA M6",
+                        "currency_type_id": "PEN",
+                        "currency_type_symbol": "S/",
+                        "has_igv": true,
+                        "sale_unit_price": "3.4200",
+                        "purchase_has_igv": true,
+                        "purchase_unit_value": 2.54237288,
+                        "purchase_unit_price": 3,
+                        "unit_type_id": "NIU",
+                        "original_unit_type_id": "NIU",
+                        "sale_affectation_igv_type": {
+                            "id": "10",
+                            "active": 1,
+                            "exportation": 0,
+                            "free": 0,
+                            "description": "Gravado - Operación Onerosa"
+                        },
+                        "sale_affectation_igv_type_id": "10",
+                        "purchase_affectation_igv_type_id": "10",
+                        "calculate_quantity": false,
+                        "has_plastic_bag_taxes": false,
+                        "amount_plastic_bag_taxes": "0.10",
+                        "colors": [],
+                        "CatItemUnitsPerPackage": [],
+                        "CatItemMoldProperty": [],
+                        "CatItemProductFamily": [],
+                        "CatItemMoldCavity": [],
+                        "CatItemPackageMeasurement": [],
+                        "CatItemStatus": [],
+                        "CatItemSize": [],
+                        "CatItemUnitBusiness": [],
+                        "item_unit_types": [],
+                        "warehouses": [
+                            {
+                                "warehouse_description": "Almacén - Almacén principal",
+                                "stock": "404.0000",
+                                "warehouse_id": 1,
+                                "checked": true
+                            }
+                        ],
+                        "attributes": null,
+                        "lots_group": [],
+                        "lots": [],
+                        "lots_enabled": false,
+                        "series_enabled": false,
+                        "is_set": false,
+                        "lot_code": null,
+                        "date_of_due": null,
+                        "barcode": "1-290606",
+                        "change_free_affectation_igv": false,
+                        "original_affectation_igv_type_id": "10",
+                        "has_isc": false,
+                        "system_isc_type_id": null,
+                        "percentage_isc": "0.00",
+                        "is_for_production": false,
+                        "subject_to_detraction": false,
+                        "exchange_points": false,
+                        "quantity_of_points": 0,
+                        "exchanged_for_points": false,
+                        "used_points_for_exchange": null,
+                        "factory_code": null,
+                        "restrict_sale_cpe": false,
+                        "image_url": "https://volperseal.goldensystem.com.pe/logo/imagen-no-disponible.jpg",
+                        "name": null,
+                        "tip_percentage": null,
+                        "name_product_pdf": "<p>UNION ARMADA M6</p>",
+                        "unit_price": "3.76",
+                        "extra_attr_name": "Tiempo de entrega",
+                        "extra_attr_value": null,
+                        "presentation": []
+                    },
+                    "quantity": "5.0000",
+                    "unit_value": "3.186441",
+                    "affectation_igv_type_id": "10",
+                    "total_base_igv": "15.93",
+                    "percentage_igv": "18.00",
+                    "total_igv": "2.87",
+                    "system_isc_type_id": null,
+                    "total_base_isc": "0.00",
+                    "percentage_isc": "0.00",
+                    "total_isc": "0.00",
+                    "total_base_other_taxes": "0.00",
+                    "percentage_other_taxes": "0.00",
+                    "total_other_taxes": "0.00",
+                    "total_taxes": "2.87",
+                    "price_type_id": "01",
+                    "unit_price": "3.760000",
+                    "total_value": "15.93",
+                    "total_charge": "0.00",
+                    "total_discount": "0.00",
+                    "total": "18.80",
+                    "attributes": {},
+                    "discounts": {},
+                    "charges": {},
+                    "additional_information": null,
+                    "warehouse_id": null,
+                    "name_product_pdf": "<p>UNION ARMADA M6</p>",
+                    "affectation_igv_type": {
+                        "id": "10",
+                        "active": 1,
+                        "exportation": 0,
+                        "free": 0,
+                        "description": "Gravado - Operación Onerosa"
+                    },
+                    "system_isc_type": null,
+                    "price_type": {
+                        "id": "01",
+                        "active": 1,
+                        "description": "Precio unitario (incluye el IGV)"
+                    }
+                },
+                {
+                    "id": 75602,
+                    "quotation_id": 1588,
+                    "item_id": 529,
+                    "item": {
+                        "id": 529,
+                        "item_code": null,
+                        "full_description": "1-291414 - UNION ARMADA M14 -",
+                        "model": null,
+                        "brand": null,
+                        "text_filter": "UNION ARMADA M14 1-291414 1-291414 UNION ARMADA",
+                        "stock_by_extra": {
+                            "total": -196,
+                            "CatItemStatus": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitBusiness": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldCavity": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemPackageMeasurement": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitsPerPackage": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldProperty": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemProductFamily": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "colors": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemSize": {
+                                "detailed": [],
+                                "total": null
+                            }
+                        },
+                        "warehouse_description": "Almacén - Almacén principal",
+                        "extra": {
+                            "colors": null,
+                            "CatItemUnitsPerPackage": null,
+                            "CatItemMoldProperty": null,
+                            "CatItemProductFamily": null,
+                            "CatItemMoldCavity": null,
+                            "CatItemPackageMeasurement": null,
+                            "CatItemStatus": null,
+                            "CatItemSize": null,
+                            "CatItemUnitBusiness": null
+                        },
+                        "category": "UNION ARMADA",
+                        "stock": "88.0000",
+                        "internal_id": "1-291414",
+                        "description": "UNION ARMADA M14",
+                        "currency_type_id": "PEN",
+                        "currency_type_symbol": "S/",
+                        "has_igv": true,
+                        "sale_unit_price": "10.4000",
+                        "purchase_has_igv": true,
+                        "purchase_unit_value": 6.77966102,
+                        "purchase_unit_price": 8,
+                        "unit_type_id": "NIU",
+                        "original_unit_type_id": "NIU",
+                        "sale_affectation_igv_type": {
+                            "id": "10",
+                            "active": 1,
+                            "exportation": 0,
+                            "free": 0,
+                            "description": "Gravado - Operación Onerosa"
+                        },
+                        "sale_affectation_igv_type_id": "10",
+                        "purchase_affectation_igv_type_id": "10",
+                        "calculate_quantity": false,
+                        "has_plastic_bag_taxes": false,
+                        "amount_plastic_bag_taxes": "0.10",
+                        "colors": [],
+                        "CatItemUnitsPerPackage": [],
+                        "CatItemMoldProperty": [],
+                        "CatItemProductFamily": [],
+                        "CatItemMoldCavity": [],
+                        "CatItemPackageMeasurement": [],
+                        "CatItemStatus": [],
+                        "CatItemSize": [],
+                        "CatItemUnitBusiness": [],
+                        "item_unit_types": [],
+                        "warehouses": [
+                            {
+                                "warehouse_description": "Almacén - Almacén principal",
+                                "stock": "88.0000",
+                                "warehouse_id": 1,
+                                "checked": true
+                            }
+                        ],
+                        "attributes": null,
+                        "lots_group": [],
+                        "lots": [],
+                        "lots_enabled": false,
+                        "series_enabled": false,
+                        "is_set": false,
+                        "lot_code": null,
+                        "date_of_due": null,
+                        "barcode": "1-291414",
+                        "change_free_affectation_igv": false,
+                        "original_affectation_igv_type_id": "10",
+                        "has_isc": false,
+                        "system_isc_type_id": null,
+                        "percentage_isc": "0.00",
+                        "is_for_production": false,
+                        "subject_to_detraction": false,
+                        "exchange_points": false,
+                        "quantity_of_points": 0,
+                        "exchanged_for_points": false,
+                        "used_points_for_exchange": null,
+                        "factory_code": null,
+                        "restrict_sale_cpe": false,
+                        "image_url": "https://volperseal.goldensystem.com.pe/logo/imagen-no-disponible.jpg",
+                        "name": null,
+                        "tip_percentage": null,
+                        "name_product_pdf": "<p>UNION ARMADA M14</p>",
+                        "unit_price": "11.44",
+                        "extra_attr_name": "Tiempo de entrega",
+                        "extra_attr_value": null,
+                        "presentation": []
+                    },
+                    "quantity": "2.0000",
+                    "unit_value": "9.694915",
+                    "affectation_igv_type_id": "10",
+                    "total_base_igv": "19.39",
+                    "percentage_igv": "18.00",
+                    "total_igv": "3.49",
+                    "system_isc_type_id": null,
+                    "total_base_isc": "0.00",
+                    "percentage_isc": "0.00",
+                    "total_isc": "0.00",
+                    "total_base_other_taxes": "0.00",
+                    "percentage_other_taxes": "0.00",
+                    "total_other_taxes": "0.00",
+                    "total_taxes": "3.49",
+                    "price_type_id": "01",
+                    "unit_price": "11.440000",
+                    "total_value": "19.39",
+                    "total_charge": "0.00",
+                    "total_discount": "0.00",
+                    "total": "22.88",
+                    "attributes": {},
+                    "discounts": {},
+                    "charges": {},
+                    "additional_information": null,
+                    "warehouse_id": null,
+                    "name_product_pdf": "<p>UNION ARMADA M14</p>",
+                    "affectation_igv_type": {
+                        "id": "10",
+                        "active": 1,
+                        "exportation": 0,
+                        "free": 0,
+                        "description": "Gravado - Operación Onerosa"
+                    },
+                    "system_isc_type": null,
+                    "price_type": {
+                        "id": "01",
+                        "active": 1,
+                        "description": "Precio unitario (incluye el IGV)"
+                    }
+                },
+                {
+                    "id": 75603,
+                    "quotation_id": 1588,
+                    "item_id": 517,
+                    "item": {
+                        "id": 517,
+                        "item_code": null,
+                        "full_description": "1-030030 - UNION ARMADA 3/16 -",
+                        "model": null,
+                        "brand": null,
+                        "text_filter": "UNION ARMADA 3/16 1-030030 1-030030 UNION ARMADA",
+                        "stock_by_extra": {
+                            "total": -1149,
+                            "CatItemStatus": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitBusiness": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldCavity": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemPackageMeasurement": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitsPerPackage": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldProperty": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemProductFamily": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "colors": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemSize": {
+                                "detailed": [],
+                                "total": null
+                            }
+                        },
+                        "warehouse_description": "Almacén - Almacén principal",
+                        "extra": {
+                            "colors": null,
+                            "CatItemUnitsPerPackage": null,
+                            "CatItemMoldProperty": null,
+                            "CatItemProductFamily": null,
+                            "CatItemMoldCavity": null,
+                            "CatItemPackageMeasurement": null,
+                            "CatItemStatus": null,
+                            "CatItemSize": null,
+                            "CatItemUnitBusiness": null
+                        },
+                        "category": "UNION ARMADA",
+                        "stock": "2324.0000",
+                        "internal_id": "1-030030",
+                        "description": "UNION ARMADA 3/16",
+                        "currency_type_id": "PEN",
+                        "currency_type_symbol": "S/",
+                        "has_igv": true,
+                        "sale_unit_price": "2.5000",
+                        "purchase_has_igv": true,
+                        "purchase_unit_value": 1.27118644,
+                        "purchase_unit_price": 1.5,
+                        "unit_type_id": "NIU",
+                        "original_unit_type_id": "NIU",
+                        "sale_affectation_igv_type": {
+                            "id": "10",
+                            "active": 1,
+                            "exportation": 0,
+                            "free": 0,
+                            "description": "Gravado - Operación Onerosa"
+                        },
+                        "sale_affectation_igv_type_id": "10",
+                        "purchase_affectation_igv_type_id": "10",
+                        "calculate_quantity": false,
+                        "has_plastic_bag_taxes": false,
+                        "amount_plastic_bag_taxes": "0.10",
+                        "colors": [],
+                        "CatItemUnitsPerPackage": [],
+                        "CatItemMoldProperty": [],
+                        "CatItemProductFamily": [],
+                        "CatItemMoldCavity": [],
+                        "CatItemPackageMeasurement": [],
+                        "CatItemStatus": [],
+                        "CatItemSize": [],
+                        "CatItemUnitBusiness": [],
+                        "item_unit_types": [],
+                        "warehouses": [
+                            {
+                                "warehouse_description": "Almacén - Almacén principal",
+                                "stock": "2324.0000",
+                                "warehouse_id": 1,
+                                "checked": true
+                            }
+                        ],
+                        "attributes": [],
+                        "lots_group": [],
+                        "lots": [],
+                        "lots_enabled": false,
+                        "series_enabled": false,
+                        "is_set": false,
+                        "lot_code": null,
+                        "date_of_due": null,
+                        "barcode": "1-030030",
+                        "change_free_affectation_igv": false,
+                        "original_affectation_igv_type_id": "10",
+                        "has_isc": false,
+                        "system_isc_type_id": null,
+                        "percentage_isc": "0.00",
+                        "is_for_production": false,
+                        "subject_to_detraction": false,
+                        "exchange_points": false,
+                        "quantity_of_points": 0,
+                        "exchanged_for_points": false,
+                        "used_points_for_exchange": null,
+                        "factory_code": null,
+                        "restrict_sale_cpe": false,
+                        "image_url": "https://volperseal.goldensystem.com.pe/logo/imagen-no-disponible.jpg",
+                        "name": null,
+                        "tip_percentage": null,
+                        "name_product_pdf": "<p>UNION ARMADA 3/16</p>",
+                        "unit_price": "2.75",
+                        "extra_attr_name": "Tiempo de entrega",
+                        "extra_attr_value": null,
+                        "presentation": []
+                    },
+                    "quantity": "5.0000",
+                    "unit_value": "2.330508",
+                    "affectation_igv_type_id": "10",
+                    "total_base_igv": "11.65",
+                    "percentage_igv": "18.00",
+                    "total_igv": "2.10",
+                    "system_isc_type_id": null,
+                    "total_base_isc": "0.00",
+                    "percentage_isc": "0.00",
+                    "total_isc": "0.00",
+                    "total_base_other_taxes": "0.00",
+                    "percentage_other_taxes": "0.00",
+                    "total_other_taxes": "0.00",
+                    "total_taxes": "2.10",
+                    "price_type_id": "01",
+                    "unit_price": "2.750000",
+                    "total_value": "11.65",
+                    "total_charge": "0.00",
+                    "total_discount": "0.00",
+                    "total": "13.75",
+                    "attributes": {},
+                    "discounts": {},
+                    "charges": {},
+                    "additional_information": null,
+                    "warehouse_id": null,
+                    "name_product_pdf": "<p>UNION ARMADA 3/16</p>",
+                    "affectation_igv_type": {
+                        "id": "10",
+                        "active": 1,
+                        "exportation": 0,
+                        "free": 0,
+                        "description": "Gravado - Operación Onerosa"
+                    },
+                    "system_isc_type": null,
+                    "price_type": {
+                        "id": "01",
+                        "active": 1,
+                        "description": "Precio unitario (incluye el IGV)"
+                    }
+                },
+                {
+                    "id": 75604,
+                    "quotation_id": 1588,
+                    "item_id": 520,
+                    "item": {
+                        "id": 520,
+                        "item_code": null,
+                        "full_description": "1-060060 - UNION ARMADA 3/8 -",
+                        "model": null,
+                        "brand": null,
+                        "text_filter": "UNION ARMADA 3/8 1-060060 1-060060 UNION ARMADA",
+                        "stock_by_extra": {
+                            "total": -3173,
+                            "CatItemStatus": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitBusiness": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldCavity": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemPackageMeasurement": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitsPerPackage": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldProperty": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemProductFamily": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "colors": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemSize": {
+                                "detailed": [],
+                                "total": null
+                            }
+                        },
+                        "warehouse_description": "Almacén - Almacén principal",
+                        "extra": {
+                            "colors": null,
+                            "CatItemUnitsPerPackage": null,
+                            "CatItemMoldProperty": null,
+                            "CatItemProductFamily": null,
+                            "CatItemMoldCavity": null,
+                            "CatItemPackageMeasurement": null,
+                            "CatItemStatus": null,
+                            "CatItemSize": null,
+                            "CatItemUnitBusiness": null
+                        },
+                        "category": "UNION ARMADA",
+                        "stock": "708.0000",
+                        "internal_id": "1-060060",
+                        "description": "UNION ARMADA 3/8",
+                        "currency_type_id": "PEN",
+                        "currency_type_symbol": "S/",
+                        "has_igv": true,
+                        "sale_unit_price": "4.1300",
+                        "purchase_has_igv": true,
+                        "purchase_unit_value": 3.16101695,
+                        "purchase_unit_price": 3.73,
+                        "unit_type_id": "NIU",
+                        "original_unit_type_id": "NIU",
+                        "sale_affectation_igv_type": {
+                            "id": "10",
+                            "active": 1,
+                            "exportation": 0,
+                            "free": 0,
+                            "description": "Gravado - Operación Onerosa"
+                        },
+                        "sale_affectation_igv_type_id": "10",
+                        "purchase_affectation_igv_type_id": "10",
+                        "calculate_quantity": false,
+                        "has_plastic_bag_taxes": false,
+                        "amount_plastic_bag_taxes": "0.10",
+                        "colors": [],
+                        "CatItemUnitsPerPackage": [],
+                        "CatItemMoldProperty": [],
+                        "CatItemProductFamily": [],
+                        "CatItemMoldCavity": [],
+                        "CatItemPackageMeasurement": [],
+                        "CatItemStatus": [],
+                        "CatItemSize": [],
+                        "CatItemUnitBusiness": [],
+                        "item_unit_types": [],
+                        "warehouses": [
+                            {
+                                "warehouse_description": "Almacén - Almacén principal",
+                                "stock": "708.0000",
+                                "warehouse_id": 1,
+                                "checked": true
+                            }
+                        ],
+                        "attributes": null,
+                        "lots_group": [],
+                        "lots": [],
+                        "lots_enabled": false,
+                        "series_enabled": false,
+                        "is_set": false,
+                        "lot_code": null,
+                        "date_of_due": null,
+                        "barcode": "1-060060",
+                        "change_free_affectation_igv": false,
+                        "original_affectation_igv_type_id": "10",
+                        "has_isc": false,
+                        "system_isc_type_id": null,
+                        "percentage_isc": "0.00",
+                        "is_for_production": false,
+                        "subject_to_detraction": false,
+                        "exchange_points": false,
+                        "quantity_of_points": 0,
+                        "exchanged_for_points": false,
+                        "used_points_for_exchange": null,
+                        "factory_code": null,
+                        "restrict_sale_cpe": false,
+                        "image_url": "https://volperseal.goldensystem.com.pe/logo/imagen-no-disponible.jpg",
+                        "name": null,
+                        "tip_percentage": null,
+                        "name_product_pdf": "<p>UNION ARMADA 3/8</p>",
+                        "unit_price": "4.54",
+                        "extra_attr_name": "Tiempo de entrega",
+                        "extra_attr_value": null,
+                        "presentation": []
+                    },
+                    "quantity": "10.0000",
+                    "unit_value": "3.847458",
+                    "affectation_igv_type_id": "10",
+                    "total_base_igv": "38.47",
+                    "percentage_igv": "18.00",
+                    "total_igv": "6.93",
+                    "system_isc_type_id": null,
+                    "total_base_isc": "0.00",
+                    "percentage_isc": "0.00",
+                    "total_isc": "0.00",
+                    "total_base_other_taxes": "0.00",
+                    "percentage_other_taxes": "0.00",
+                    "total_other_taxes": "0.00",
+                    "total_taxes": "6.93",
+                    "price_type_id": "01",
+                    "unit_price": "4.540000",
+                    "total_value": "38.47",
+                    "total_charge": "0.00",
+                    "total_discount": "0.00",
+                    "total": "45.40",
+                    "attributes": {},
+                    "discounts": {},
+                    "charges": {},
+                    "additional_information": null,
+                    "warehouse_id": null,
+                    "name_product_pdf": "<p>UNION ARMADA 3/8</p>",
+                    "affectation_igv_type": {
+                        "id": "10",
+                        "active": 1,
+                        "exportation": 0,
+                        "free": 0,
+                        "description": "Gravado - Operación Onerosa"
+                    },
+                    "system_isc_type": null,
+                    "price_type": {
+                        "id": "01",
+                        "active": 1,
+                        "description": "Precio unitario (incluye el IGV)"
+                    }
+                },
+                {
+                    "id": 75605,
+                    "quotation_id": 1588,
+                    "item_id": 522,
+                    "item": {
+                        "id": 522,
+                        "item_code": null,
+                        "full_description": "1-100100 - UNION ARMADA 5/8 -",
+                        "model": null,
+                        "brand": null,
+                        "text_filter": "UNION ARMADA 5/8 1-100100 1-100100 UNION ARMADA",
+                        "stock_by_extra": {
+                            "total": -664,
+                            "CatItemStatus": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitBusiness": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldCavity": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemPackageMeasurement": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitsPerPackage": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldProperty": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemProductFamily": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "colors": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemSize": {
+                                "detailed": [],
+                                "total": null
+                            }
+                        },
+                        "warehouse_description": "Almacén - Almacén principal",
+                        "extra": {
+                            "colors": null,
+                            "CatItemUnitsPerPackage": null,
+                            "CatItemMoldProperty": null,
+                            "CatItemProductFamily": null,
+                            "CatItemMoldCavity": null,
+                            "CatItemPackageMeasurement": null,
+                            "CatItemStatus": null,
+                            "CatItemSize": null,
+                            "CatItemUnitBusiness": null
+                        },
+                        "category": "UNION ARMADA",
+                        "stock": "-2.0000",
+                        "internal_id": "1-100100",
+                        "description": "UNION ARMADA 5/8",
+                        "currency_type_id": "PEN",
+                        "currency_type_symbol": "S/",
+                        "has_igv": true,
+                        "sale_unit_price": "10.6200",
+                        "purchase_has_igv": true,
+                        "purchase_unit_value": 8.15254237,
+                        "purchase_unit_price": 9.62,
+                        "unit_type_id": "NIU",
+                        "original_unit_type_id": "NIU",
+                        "sale_affectation_igv_type": {
+                            "id": "10",
+                            "active": 1,
+                            "exportation": 0,
+                            "free": 0,
+                            "description": "Gravado - Operación Onerosa"
+                        },
+                        "sale_affectation_igv_type_id": "10",
+                        "purchase_affectation_igv_type_id": "10",
+                        "calculate_quantity": false,
+                        "has_plastic_bag_taxes": false,
+                        "amount_plastic_bag_taxes": "0.10",
+                        "colors": [],
+                        "CatItemUnitsPerPackage": [],
+                        "CatItemMoldProperty": [],
+                        "CatItemProductFamily": [],
+                        "CatItemMoldCavity": [],
+                        "CatItemPackageMeasurement": [],
+                        "CatItemStatus": [],
+                        "CatItemSize": [],
+                        "CatItemUnitBusiness": [],
+                        "item_unit_types": [],
+                        "warehouses": [
+                            {
+                                "warehouse_description": "Almacén - Almacén principal",
+                                "stock": "-2.0000",
+                                "warehouse_id": 1,
+                                "checked": true
+                            }
+                        ],
+                        "attributes": null,
+                        "lots_group": [],
+                        "lots": [],
+                        "lots_enabled": false,
+                        "series_enabled": false,
+                        "is_set": false,
+                        "lot_code": null,
+                        "date_of_due": null,
+                        "barcode": "1-100100",
+                        "change_free_affectation_igv": false,
+                        "original_affectation_igv_type_id": "10",
+                        "has_isc": false,
+                        "system_isc_type_id": null,
+                        "percentage_isc": "0.00",
+                        "is_for_production": false,
+                        "subject_to_detraction": false,
+                        "exchange_points": false,
+                        "quantity_of_points": 0,
+                        "exchanged_for_points": false,
+                        "used_points_for_exchange": null,
+                        "factory_code": null,
+                        "restrict_sale_cpe": false,
+                        "image_url": "https://volperseal.goldensystem.com.pe/logo/imagen-no-disponible.jpg",
+                        "name": null,
+                        "tip_percentage": null,
+                        "name_product_pdf": "<p>UNION ARMADA 5/8</p>",
+                        "unit_price": "11.68",
+                        "extra_attr_name": "Tiempo de entrega",
+                        "extra_attr_value": null,
+                        "presentation": []
+                    },
+                    "quantity": "4.0000",
+                    "unit_value": "9.898305",
+                    "affectation_igv_type_id": "10",
+                    "total_base_igv": "39.59",
+                    "percentage_igv": "18.00",
+                    "total_igv": "7.13",
+                    "system_isc_type_id": null,
+                    "total_base_isc": "0.00",
+                    "percentage_isc": "0.00",
+                    "total_isc": "0.00",
+                    "total_base_other_taxes": "0.00",
+                    "percentage_other_taxes": "0.00",
+                    "total_other_taxes": "0.00",
+                    "total_taxes": "7.13",
+                    "price_type_id": "01",
+                    "unit_price": "11.680000",
+                    "total_value": "39.59",
+                    "total_charge": "0.00",
+                    "total_discount": "0.00",
+                    "total": "46.72",
+                    "attributes": {},
+                    "discounts": {},
+                    "charges": {},
+                    "additional_information": null,
+                    "warehouse_id": null,
+                    "name_product_pdf": "<p>UNION ARMADA 5/8</p>",
+                    "affectation_igv_type": {
+                        "id": "10",
+                        "active": 1,
+                        "exportation": 0,
+                        "free": 0,
+                        "description": "Gravado - Operación Onerosa"
+                    },
+                    "system_isc_type": null,
+                    "price_type": {
+                        "id": "01",
+                        "active": 1,
+                        "description": "Precio unitario (incluye el IGV)"
+                    }
+                },
+                {
+                    "id": 75606,
+                    "quotation_id": 1588,
+                    "item_id": 615,
+                    "item": {
+                        "id": 615,
+                        "item_code": null,
+                        "full_description": "5-006006 - CONECTOR RECTO 3/8 X 3/8 NPT -",
+                        "model": null,
+                        "brand": null,
+                        "text_filter": "CONECTOR RECTO 3/8 X 3/8 NPT 5-006006 5-006006 CONECTOR RECTO",
+                        "stock_by_extra": {
+                            "total": -10355,
+                            "CatItemStatus": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitBusiness": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldCavity": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemPackageMeasurement": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitsPerPackage": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldProperty": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemProductFamily": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "colors": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemSize": {
+                                "detailed": [],
+                                "total": null
+                            }
+                        },
+                        "warehouse_description": "Almacén - Almacén principal",
+                        "extra": {
+                            "colors": null,
+                            "CatItemUnitsPerPackage": null,
+                            "CatItemMoldProperty": null,
+                            "CatItemProductFamily": null,
+                            "CatItemMoldCavity": null,
+                            "CatItemPackageMeasurement": null,
+                            "CatItemStatus": null,
+                            "CatItemSize": null,
+                            "CatItemUnitBusiness": null
+                        },
+                        "category": "CONECTOR RECTO",
+                        "stock": "1345.0000",
+                        "internal_id": "5-006006",
+                        "description": "CONECTOR RECTO 3/8 X 3/8 NPT",
+                        "currency_type_id": "PEN",
+                        "currency_type_symbol": "S/",
+                        "has_igv": true,
+                        "sale_unit_price": "4.0100",
+                        "purchase_has_igv": true,
+                        "purchase_unit_value": 2.55084746,
+                        "purchase_unit_price": 3.01,
+                        "unit_type_id": "NIU",
+                        "original_unit_type_id": "NIU",
+                        "sale_affectation_igv_type": {
+                            "id": "10",
+                            "active": 1,
+                            "exportation": 0,
+                            "free": 0,
+                            "description": "Gravado - Operación Onerosa"
+                        },
+                        "sale_affectation_igv_type_id": "10",
+                        "purchase_affectation_igv_type_id": "10",
+                        "calculate_quantity": false,
+                        "has_plastic_bag_taxes": false,
+                        "amount_plastic_bag_taxes": "0.10",
+                        "colors": [],
+                        "CatItemUnitsPerPackage": [],
+                        "CatItemMoldProperty": [],
+                        "CatItemProductFamily": [],
+                        "CatItemMoldCavity": [],
+                        "CatItemPackageMeasurement": [],
+                        "CatItemStatus": [],
+                        "CatItemSize": [],
+                        "CatItemUnitBusiness": [],
+                        "item_unit_types": [],
+                        "warehouses": [
+                            {
+                                "warehouse_description": "Almacén - Almacén principal",
+                                "stock": "1345.0000",
+                                "warehouse_id": 1,
+                                "checked": true
+                            }
+                        ],
+                        "attributes": null,
+                        "lots_group": [],
+                        "lots": [],
+                        "lots_enabled": false,
+                        "series_enabled": false,
+                        "is_set": false,
+                        "lot_code": null,
+                        "date_of_due": null,
+                        "barcode": "5-006006",
+                        "change_free_affectation_igv": false,
+                        "original_affectation_igv_type_id": "10",
+                        "has_isc": false,
+                        "system_isc_type_id": null,
+                        "percentage_isc": "0.00",
+                        "is_for_production": false,
+                        "subject_to_detraction": false,
+                        "exchange_points": false,
+                        "quantity_of_points": 0,
+                        "exchanged_for_points": false,
+                        "used_points_for_exchange": null,
+                        "factory_code": null,
+                        "restrict_sale_cpe": false,
+                        "image_url": "https://volperseal.goldensystem.com.pe/logo/imagen-no-disponible.jpg",
+                        "name": null,
+                        "tip_percentage": null,
+                        "name_product_pdf": "<p>CONECTOR RECTO 3/8 X 3/8 NPT</p>",
+                        "unit_price": "4.41",
+                        "extra_attr_name": "Tiempo de entrega",
+                        "extra_attr_value": null,
+                        "presentation": []
+                    },
+                    "quantity": "14.0000",
+                    "unit_value": "3.737288",
+                    "affectation_igv_type_id": "10",
+                    "total_base_igv": "52.32",
+                    "percentage_igv": "18.00",
+                    "total_igv": "9.42",
+                    "system_isc_type_id": null,
+                    "total_base_isc": "0.00",
+                    "percentage_isc": "0.00",
+                    "total_isc": "0.00",
+                    "total_base_other_taxes": "0.00",
+                    "percentage_other_taxes": "0.00",
+                    "total_other_taxes": "0.00",
+                    "total_taxes": "9.42",
+                    "price_type_id": "01",
+                    "unit_price": "4.410000",
+                    "total_value": "52.32",
+                    "total_charge": "0.00",
+                    "total_discount": "0.00",
+                    "total": "61.74",
+                    "attributes": {},
+                    "discounts": {},
+                    "charges": {},
+                    "additional_information": null,
+                    "warehouse_id": null,
+                    "name_product_pdf": "<p>CONECTOR RECTO 3/8 X 3/8 NPT</p>",
+                    "affectation_igv_type": {
+                        "id": "10",
+                        "active": 1,
+                        "exportation": 0,
+                        "free": 0,
+                        "description": "Gravado - Operación Onerosa"
+                    },
+                    "system_isc_type": null,
+                    "price_type": {
+                        "id": "01",
+                        "active": 1,
+                        "description": "Precio unitario (incluye el IGV)"
+                    }
+                },
+                {
+                    "id": 75607,
+                    "quotation_id": 1588,
+                    "item_id": 562,
+                    "item": {
+                        "id": 562,
+                        "item_code": null,
+                        "full_description": "3-000060 - GUIAS O CLAVIJAS 3/8 -",
+                        "model": null,
+                        "brand": null,
+                        "text_filter": "GUIAS O CLAVIJAS 3/8 3-000060 3-000060 GUIA",
+                        "stock_by_extra": {
+                            "total": -19142,
+                            "CatItemStatus": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitBusiness": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldCavity": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemPackageMeasurement": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemUnitsPerPackage": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemMoldProperty": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemProductFamily": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "colors": {
+                                "detailed": [],
+                                "total": null
+                            },
+                            "CatItemSize": {
+                                "detailed": [],
+                                "total": null
+                            }
+                        },
+                        "warehouse_description": "Almacén - Almacén principal",
+                        "extra": {
+                            "colors": null,
+                            "CatItemUnitsPerPackage": null,
+                            "CatItemMoldProperty": null,
+                            "CatItemProductFamily": null,
+                            "CatItemMoldCavity": null,
+                            "CatItemPackageMeasurement": null,
+                            "CatItemStatus": null,
+                            "CatItemSize": null,
+                            "CatItemUnitBusiness": null
+                        },
+                        "category": "GUIA",
+                        "stock": "1610.0000",
+                        "internal_id": "3-000060",
+                        "description": "GUIAS O CLAVIJAS 3/8",
+                        "currency_type_id": "PEN",
+                        "currency_type_symbol": "S/",
+                        "has_igv": true,
+                        "sale_unit_price": "0.4100",
+                        "purchase_has_igv": true,
+                        "purchase_unit_value": 0.31355932,
+                        "purchase_unit_price": 0.37,
+                        "unit_type_id": "NIU",
+                        "original_unit_type_id": "NIU",
+                        "sale_affectation_igv_type": {
+                            "id": "10",
+                            "active": 1,
+                            "exportation": 0,
+                            "free": 0,
+                            "description": "Gravado - Operación Onerosa"
+                        },
+                        "sale_affectation_igv_type_id": "10",
+                        "purchase_affectation_igv_type_id": "10",
+                        "calculate_quantity": false,
+                        "has_plastic_bag_taxes": false,
+                        "amount_plastic_bag_taxes": "0.10",
+                        "colors": [],
+                        "CatItemUnitsPerPackage": [],
+                        "CatItemMoldProperty": [],
+                        "CatItemProductFamily": [],
+                        "CatItemMoldCavity": [],
+                        "CatItemPackageMeasurement": [],
+                        "CatItemStatus": [],
+                        "CatItemSize": [],
+                        "CatItemUnitBusiness": [],
+                        "item_unit_types": [],
+                        "warehouses": [
+                            {
+                                "warehouse_description": "Almacén - Almacén principal",
+                                "stock": "1610.0000",
+                                "warehouse_id": 1,
+                                "checked": true
+                            }
+                        ],
+                        "attributes": null,
+                        "lots_group": [],
+                        "lots": [],
+                        "lots_enabled": false,
+                        "series_enabled": false,
+                        "is_set": false,
+                        "lot_code": null,
+                        "date_of_due": null,
+                        "barcode": "3-000060",
+                        "change_free_affectation_igv": false,
+                        "original_affectation_igv_type_id": "10",
+                        "has_isc": false,
+                        "system_isc_type_id": null,
+                        "percentage_isc": "0.00",
+                        "is_for_production": false,
+                        "subject_to_detraction": false,
+                        "exchange_points": false,
+                        "quantity_of_points": 0,
+                        "exchanged_for_points": false,
+                        "used_points_for_exchange": null,
+                        "factory_code": null,
+                        "restrict_sale_cpe": false,
+                        "image_url": "https://volperseal.goldensystem.com.pe/logo/imagen-no-disponible.jpg",
+                        "name": null,
+                        "tip_percentage": null,
+                        "name_product_pdf": "<p>GUIAS O CLAVIJAS 3/8</p>",
+                        "unit_price": "0.45",
+                        "extra_attr_name": "Tiempo de entrega",
+                        "extra_attr_value": null,
+                        "presentation": []
+                    },
+                    "quantity": "100.0000",
+                    "unit_value": "0.381356",
+                    "affectation_igv_type_id": "10",
+                    "total_base_igv": "38.14",
+                    "percentage_igv": "18.00",
+                    "total_igv": "6.86",
+                    "system_isc_type_id": null,
+                    "total_base_isc": "0.00",
+                    "percentage_isc": "0.00",
+                    "total_isc": "0.00",
+                    "total_base_other_taxes": "0.00",
+                    "percentage_other_taxes": "0.00",
+                    "total_other_taxes": "0.00",
+                    "total_taxes": "6.86",
+                    "price_type_id": "01",
+                    "unit_price": "0.450000",
+                    "total_value": "38.14",
+                    "total_charge": "0.00",
+                    "total_discount": "0.00",
+                    "total": "45.00",
+                    "attributes": {},
+                    "discounts": {},
+                    "charges": {},
+                    "additional_information": null,
+                    "warehouse_id": null,
+                    "name_product_pdf": "<p>GUIAS O CLAVIJAS 3/8</p>",
+                    "affectation_igv_type": {
+                        "id": "10",
+                        "active": 1,
+                        "exportation": 0,
+                        "free": 0,
+                        "description": "Gravado - Operación Onerosa"
+                    },
+                    "system_isc_type": null,
+                    "price_type": {
+                        "id": "01",
+                        "active": 1,
+                        "description": "Precio unitario (incluye el IGV)"
+                    }
+                }
+            ],
+            "user": {
+                "id": 8,
+                "name": "Joselin Ramirez Inga",
+                "email": "ventas6@volperseal.com",
+                "email_verified_at": null,
+                "password": "$2y$10$D2HprMLveO4R5KlZv2naEOrr0myz/xlVAfjEyMb6YccgE9UNPqpdW",
+                "api_token": "lEBkyb0gYlHUhREA4jbDz7UAs74m9JekkUyqEYx5FO9eKowRZH",
+                "establishment_id": 1,
+                "type": "admin",
+                "active": 1,
+                "is_multi_user": false,
+                "multi_user_id": null,
+                "permission_force_send_by_summary": false,
+                "permission_edit_cpe": false,
+                "permission_edit_item_prices": true,
+                "create_payment": true,
+                "delete_purchase": true,
+                "annular_purchase": true,
+                "edit_purchase": true,
+                "delete_payment": true,
+                "recreate_documents": false,
+                "locked": false,
+                "multiple_default_document_types": false,
+                "photo_filename": null,
+                "position": null,
+                "contract_date": null,
+                "date_of_birth": null,
+                "corporate_cell_phone": null,
+                "personal_cell_phone": null,
+                "corporate_email": null,
+                "personal_email": null,
+                "last_names": null,
+                "names": null,
+                "identity_document_type_id": null,
+                "number": null,
+                "address": null,
+                "telephone": null,
+                "last_password_update": "2026-01-13 09:58:17",
+                "restaurant_role_id": null,
+                "restaurant_pin": "1111",
+                "created_at": "2026-01-13 04:58:17",
+                "updated_at": "2026-01-21 04:54:05",
+                "document_id": null,
+                "series_id": null,
+                "zone_id": null,
+                "auditor": 0,
+                "edit_sale_note": true,
+                "annular_sale_note": true,
+                "establishment": {
+                    "id": 1,
+                    "description": "Almacén principal",
+                    "country_id": "PE",
+                    "department_id": "15",
+                    "province_id": "1501",
+                    "district_id": "150118",
+                    "address": "URB. ALAMEDA DE HUACHIPA CAL. A MZ F LT 4",
+                    "email": "volperseal@gmail.com",
+                    "telephone": "-",
+                    "code": "0000",
+                    "aditional_information": "REF: PARADERO TUMI",
+                    "web_address": null,
+                    "trade_address": null,
+                    "customer_id": 1,
+                    "logo": null,
+                    "template_pdf": "gestion_default",
+                    "has_igv_31556": false,
+                    "template_ticket_pdf": "gestion_default",
+                    "created_at": null,
+                    "updated_at": "2026-01-26 07:58:19",
+                    "templates_pdf_documents": null,
+                    "templates_pdf_sale_notes": null,
+                    "templates_pdf_dispatch": null,
+                    "templates_pdf_quotations": "gestion_default",
+                    "templates_pdf_ticket_documents": null,
+                    "templates_pdf_ticket_sale_notes": null,
+                    "templates_pdf_ticket_dispatch": null,
+                    "templates_pdf_ticket_quotations": null,
+                    "country": {
+                        "id": "PE",
+                        "description": "PERU",
+                        "active": 1
+                    },
+                    "department": {
+                        "id": "15",
+                        "description": "LIMA",
+                        "active": 1
+                    },
+                    "province": {
+                        "id": "1501",
+                        "department_id": "15",
+                        "description": "Lima",
+                        "active": 1
+                    },
+                    "district": {
+                        "id": "150118",
+                        "province_id": "1501",
+                        "description": "Lurigancho",
+                        "active": 1
+                    }
+                }
+            },
+            "soap_type": {
+                "id": "02",
+                "description": "Producción"
+            },
+            "state_type": {
+                "id": "01",
+                "description": "Registrado"
+            },
+            "currency_type": {
+                "id": "PEN",
+                "active": 1,
+                "symbol": "S/",
+                "description": "Soles"
+            },
+            "person": {
+                "id": 23,
+                "type": "customers",
+                "identity_document_type_id": "6",
+                "number": "20612114987",
+                "name": "UNIVERSO INDUSTRIAL HIDRA L& A",
+                "trade_name": null,
+                "internal_code": null,
+                "barcode": null,
+                "country_id": "PE",
+                "nationality_id": "PE",
+                "department_id": "15",
+                "province_id": "1501",
+                "district_id": "150118",
+                "address_type_id": null,
+                "address": "AV. LAS TORRES LT. 3 C.P. HUACHIPA",
+                "establishment_code": "0000",
+                "condition": "HABIDO",
+                "state": "ACTIVO",
+                "email": null,
+                "telephone": null,
+                "accumulated_points": 0,
+                "perception_agent": false,
+                "person_type_id": null,
+                "contact": {
+                    "full_name": null,
+                    "phone": null
+                },
+                "comment": null,
+                "percentage_perception": 0,
+                "enabled": true,
+                "website": null,
+                "zone": null,
+                "observation": null,
+                "created_at": "2024-08-07 07:52:04",
+                "updated_at": "2024-08-07 07:52:04",
+                "status": 1,
+                "credit_days": 0,
+                "optional_email": null,
+                "parent_id": 0,
+                "zone_id": null,
+                "seller_id": null,
+                "has_discount": false,
+                "discount_type": "01",
+                "discount_amount": 0,
+                "identity_document_type": {
+                    "id": "6",
+                    "active": true,
+                    "description": "RUC"
+                },
+                "country": {
+                    "id": "PE",
+                    "description": "PERU",
+                    "active": 1
+                },
+                "department": {
+                    "id": "15",
+                    "description": "LIMA",
+                    "active": 1
+                },
+                "province": {
+                    "id": "1501",
+                    "department_id": "15",
+                    "description": "Lima",
+                    "active": 1
+                },
+                "district": {
+                    "id": "150118",
+                    "province_id": "1501",
+                    "description": "Lurigancho",
+                    "active": 1
+                },
+                "addresses": [
+                    {
+                        "id": 265,
+                        "person_id": 23,
+                        "country_id": "PE",
+                        "department_id": "15",
+                        "province_id": "1501",
+                        "district_id": "150118",
+                        "address": "AV. LAS TORRES LT. 3 C.P. HUACHIPA",
+                        "phone": null,
+                        "email": null,
+                        "main": 1,
+                        "establishment_code": "0000",
+                        "optional_email": null
+                    }
+                ],
+                "person_type": null
+            }
+        },
+        "message_text": "Su cotización COT-1588 ha sido generado correctamente, puede revisarlo en el siguiente enlace: https://volperseal.goldensystem.com.pe/print/quotation/9fefac5f-2591-4111-8e3f-1ebbf29f7c8a/a4",
+        "number_full": "COT-1588",
+        "customer_email": null,
+        "customer_telephone": null,
+        "customer_id": 23
+    }
+}

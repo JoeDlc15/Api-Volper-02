@@ -10,158 +10,640 @@
     <!-- CSS de DataTables y Estilos -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.4em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+            color: #fff;
+        }
+        .badge-secondary { background-color: #6c757d; }
+        .badge-warning { background-color: #f39c12; }
+        .badge-success { background-color: #2ecc71; }
+        .table-active td { background-color: #e6f2ff !important; transition: background-color 0.3s ease; }
+
+        /* Floating Toast Notification Styles */
+        #toast-container {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast-notification {
+            min-width: 280px;
+            max-width: 400px;
+            padding: 14px 20px;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInToast 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            border-left: 5px solid #cbd5e0;
+        }
+        .toast-notification.success {
+            border-left-color: #2ecc71;
+        }
+        .toast-notification.error {
+            border-left-color: #e74c3c;
+        }
+        .toast-notification.warning {
+            border-left-color: #f39c12;
+        }
+        .toast-notification.info {
+            border-left-color: #4361ee;
+        }
+        .toast-notification.fade-out {
+            animation: fadeOutToast 0.4s ease-out forwards;
+        }
+
+        @keyframes slideInToast {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOutToast {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-15px); }
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- Mobile Header -->
-    <div class="mobile-header">
-        <h2>Volper Seal</h2>
-        <button id="menu-toggle" class="btn-icon">☰</button>
+    <!-- Login View -->
+    <div id="login-container" class="login-view" style="display: none;">
+        <div class="login-card">
+            <h2 style="text-align: center; margin-bottom: 5px;">Acceso a Volper</h2>
+            <p style="text-align: center; color: #7f8c8d; margin-bottom: 20px;">Ingresa con tus credenciales</p>
+            <form id="loginForm">
+                <div style="margin-bottom: 15px;">
+                    <input type="email" id="loginEmail" placeholder="Correo electrónico" required class="form-control"
+                        style="width: 100%;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <input type="password" id="loginPassword" placeholder="Contraseña" required class="form-control"
+                        style="width: 100%;">
+                </div>
+                <button type="submit" id="btnLogin" class="btn btn-primary"
+                    style="width: 100%; justify-content: center;">Iniciar Sesión</button>
+            </form>
+            <p id="loginError"
+                style="display:none; color: #e74c3c; margin-top: 15px; text-align: center; font-weight: bold;"></p>
+        </div>
     </div>
 
-    <!-- Sidebar -->
-    <nav class="sidebar">
-        <div class="sidebar-header">
+    <!-- App Container -->
+    <div id="app-container" style="display: contents;">
+
+        <!-- Mobile Header -->
+        <div class="mobile-header">
             <h2>Volper Seal</h2>
+            <button id="menu-toggle" class="btn-icon">☰</button>
         </div>
-        <ul class="nav-menu">
-            <li><a href="#" class="nav-link active" data-target="view-inventory">📦 Inventario</a></li>
-            <li><a href="#" class="nav-link" data-target="view-quotations">📑 Cotizaciones</a></li>
-            <li><a href="#" class="nav-link" data-target="view-movimientos">🔁 Movimientos</a></li>
-        </ul>
-    </nav>
 
-    <!-- Main Content -->
-    <main class="main-content">
-
-        <!-- View: Inventario -->
-        <section id="view-inventory" class="view-section active">
-            <div class="container">
-                <div class="header-actions">
-                    <div>
-                        <h1>📦 Inventario Volper Seal</h1>
-                        <div id="status" class="status-msg">Listo para operar.</div>
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="logo-area">
+                        <span class="logo-icon" style="color: #2ecc71; filter: drop-shadow(0 0 3px rgba(46,204,113,0.4));">⚙️</span>
+                        <h2 class="logo-text">Volper Seal</h2>
                     </div>
-                    <button id="btnUpdate" class="btn btn-primary">🔄 Sincronizar Catálogo</button>
+                    <button type="button" id="sidebar-pin" class="pin-btn" title="Fijar menú lateral">📌</button>
                 </div>
-                <hr>
-                <div class="table-container">
-                    <table id="productsTable" class="display nowrap" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID Interno</th>
-                                <th>Nombre</th>
-                                <th>Categoría</th>
-                                <th>Stock</th>
-                                <th>Precio Venta</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data loaded via AJAX -->
-                        </tbody>
-                    </table>
-                </div>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="#" class="nav-link active" data-target="view-inventory">
+                            <span class="menu-icon">📦</span>
+                            <span class="menu-text">Inventario</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="view-quotations">
+                            <span class="menu-icon">📑</span>
+                            <span class="menu-text">Cotizaciones</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="view-movimientos">
+                            <span class="menu-icon">🔁</span>
+                            <span class="menu-text">Movimientos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="view-warehouses">
+                            <span class="menu-icon">🏢</span>
+                            <span class="menu-text">Almacenes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="view-catalog">
+                            <span class="menu-icon">🗂️</span>
+                            <span class="menu-text">Catálogo / Orígenes</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </section>
+            <ul class="nav-menu" style="margin-bottom: 20px;">
+                <li>
+                    <a href="#" class="nav-link" data-target="view-config">
+                        <span class="menu-icon">⚙️</span>
+                        <span class="menu-text">Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-        <!-- View: Cotizaciones -->
-        <section id="view-quotations" class="view-section">
+        <!-- Main Content -->
+        <main class="main-content">
 
-            <div class="container card">
-                <h3>➕ Agregar Nueva Cotización</h3>
-                <div class="input-group">
-                    <input type="number" id="quotationInput" placeholder="Ej: 1532" class="form-control">
-                    <button id="btnAddQuotation" class="btn btn-secondary">Importar</button>
-                </div>
-                <p id="msgQuotation"></p>
-            </div>
-
-            <div class="container mt-4">
-                <h2>📑 Historial de Cotizaciones</h2>
-                <div class="table-container">
-                    <table id="quotationsTable" class="display nowrap" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Número</th>
-                                <th>Fecha</th>
-                                <th>Cliente</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="quotationsBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Contenedor para ver el detalle de la cotización -->
-            <div id="detailContainer" class="container card mt-4" style="display: none;">
-                <div class="detail-header">
-                    <h2 id="detNumber">Detalle de Cotización</h2>
-                    <button id="btnCloseDetail" class="btn btn-close">✖ Cerrar Detalle</button>
-                </div>
-
-                <div class="detail-info">
-                    <p><strong>Cliente:</strong> <span id="detCustomer"></span></p>
-                    <p><strong>Dirección:</strong> <span id="detAddress"></span></p>
-                    <p><strong>Fecha/Hora:</strong> <span id="detDateTime"></span></p>
-                </div>
-
-                <div class="table-container">
-                    <table id="itemsTable" class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Producto</th>
-                                <th>Requerido</th>
-                                <th>Stock Sist. (Histórico)</th>
-                                <th>Stock Actual (Ref)</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detItemsBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- View: Movimientos -->
-        <section id="view-movimientos" class="view-section">
-            <div class="container">
-                <div class="header-actions">
+            <!-- Alert Banner for missing config (Global) -->
+            <div id="missing-config-alert" style="display: none; background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; padding: 15px 20px; border-radius: 8px; margin-bottom: 25px; align-items: center; justify-content: space-between; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); width: 100%;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 1.5rem;">⚠️</span>
                     <div>
-                        <h1>🔁 Movimientos de Inventario</h1>
-                        <div id="statusMovimientos" class="status-msg">Listo para operar.</div>
+                        <strong style="font-size: 1rem; display: block; text-align: left;">¡Atención! Faltan configurar credenciales</strong>
+                        <span style="font-size: 0.85rem; color: #9b2c2c;">Es necesario configurar las cuentas de <strong>Ventas/Administrador</strong> y <strong>Almacén</strong> para poder operar el sistema.</span>
                     </div>
-                    <button id="btnUpdateMovimientos" class="btn btn-primary">🔄 Extraer Movimientos</button>
                 </div>
-                <hr>
-                <div class="table-container">
-                    <table id="movimientosTable" class="display nowrap" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>ID Item</th>
-                                <th>Código</th>
-                                <th>Descripción</th>
-                                <th>Almacén</th>
-                                <th>Stock</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data loaded via AJAX -->
-                        </tbody>
-                    </table>
+                <button type="button" class="btn btn-danger btn-go-to-config" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 6px; width: auto; font-weight: bold; cursor: pointer;">⚙️ Configurar Ahora</button>
+            </div>
+
+            <!-- View: Inventario -->
+            <section id="view-inventory" class="view-section active">
+                <div class="container">
+
+                    <div class="header-actions">
+                        <div>
+                            <h1>📦 Inventario Volper Seal</h1>
+                            <div id="status" class="status-msg">Listo para operar.</div>
+                        </div>
+                        <button id="btnUpdate" class="btn btn-primary">🔄 Sincronizar Catálogo</button>
+                    </div>
+                    <hr>
+                    <div class="filters-container"
+                        style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+                        <div class="filter-group">
+                            <label for="filterWarehouse"
+                                style="margin-right: 10px; font-weight: bold; color: #2c3e50;">🏢 Almacén:</label>
+                            <select id="filterWarehouse" class="form-control"
+                                style="width: auto; display: inline-block;">
+                                <option value="all">Todos los almacenes</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterStock" style="margin-right: 10px; font-weight: bold; color: #2c3e50;">📦
+                                Stock:</label>
+                            <select id="filterStock" class="form-control" style="width: auto; display: inline-block;">
+                                <option value="all">Todos</option>
+                                <option value=">0">Mayor a 0 (> 0)</option>
+                                <option value="<0">Menor a 0 (< 0)</option>
+                                <option value="!=0">Diferente de 0 (≠ 0)</option>
+                                <option value="=0">Igual a 0 (= 0)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="productsTable" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID Interno</th>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Stock Total</th>
+                                    <th>Reserva</th>
+                                    <th>Stock Disp.</th>
+                                    <th>Almacén</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data loaded via AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Cotizaciones -->
+            <section id="view-quotations" class="view-section">
+
+                <div class="container card">
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                        <!-- Agregar Cotización -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <h3>➕ Agregar Nueva Cotización</h3>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="number" id="quotationInput" placeholder="Ej: 1532" class="form-control" style="max-width: 200px;">
+                                <button id="btnAddQuotation" class="btn btn-primary">Importar</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Acciones Globales -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <h3>⚡ Acciones</h3>
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <button type="button" id="btnSyncInvoices" class="btn btn-warning">🔄 Sincronizar Facturas (Masivo)</button>
+                                <button type="button" id="btnOpenDeleteModal" class="btn btn-danger">🗑️ Eliminar Cotización</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container mt-4">
+                    <h2>📑 Historial de Cotizaciones</h2>
+                    
+                    <!-- Filtros de Cotizaciones -->
+                    <div style="background: var(--bg-card); border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: bold; color: var(--text-muted); font-size: 0.95rem;">Estado:</span>
+                            <select id="filterQuotationStatus" class="form-control" style="width: auto; min-width: 150px;">
+                                <option value="all">Todos los estados</option>
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="RESERVADO">RESERVADO</option>
+                                <option value="FACTURADO">FACTURADO</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: bold; color: var(--text-muted); font-size: 0.95rem;">Cliente:</span>
+                            <select id="filterQuotationCustomer" class="form-control" style="width: auto; min-width: 250px; max-width: 350px;">
+                                <option value="all">Todos los clientes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="quotationsTable" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Estado</th>
+                                    <th>Documento</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quotationsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Contenedor para ver el detalle de la cotización -->
+                <div id="detailContainer" class="container card mt-4" style="display: none;">
+                    <div class="detail-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 id="detNumber" style="margin: 0;">Detalle de Cotización</h2>
+                        <div>
+                            <button id="btnReserveDetail" class="btn btn-warning" style="margin-right: 10px; display: none;">🔒 Reservar</button>
+                            <button id="btnPdfDetail" class="btn btn-primary" style="margin-right: 10px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;">📄 Generar PDF (Guía)</button>
+                            <button id="btnCloseDetail" class="btn btn-close">✖ Cerrar Detalle</button>
+                        </div>
+                    </div>
+
+                    <div class="detail-info" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                        <div>
+                            <p><strong>Cliente:</strong> <span id="detCustomer"></span></p>
+                            <p><strong>Dirección:</strong> <span id="detAddress"></span></p>
+                        </div>
+                        <div>
+                            <p><strong>Fecha/Hora:</strong> <span id="detDateTime"></span></p>
+                            <p><strong>Vendedor:</strong> <span id="detSeller" style="color: var(--primary-color); font-weight: 600;"></span></p>
+                            <p><strong>Observación:</strong> <span id="detDescription" style="font-style: italic; color: #718096;"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="itemsTable" class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Producto</th>
+                                    <th>Requerido</th>
+                                    <th>Reserva Global</th>
+                                    <th>Stock Disp.</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detItemsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- View: Movimientos -->
+            <section id="view-movimientos" class="view-section">
+                <div class="container">
+                    <div class="header-actions">
+                        <div>
+                            <h1>🔁 Movimientos de Inventario</h1>
+                            <div id="statusMovimientos" class="status-msg">Listo para operar.</div>
+                        </div>
+                        <button id="btnUpdateMovimientos" class="btn btn-primary">🔄 Extraer Movimientos</button>
+                    </div>
+                    <hr>
+                    <div class="table-container">
+                        <table id="movimientosTable" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ID Item</th>
+                                    <th>Código</th>
+                                    <th>Descripción</th>
+                                    <th>Almacén</th>
+                                    <th>Stock</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data loaded via AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Modal for Ingreso -->
+                <div id="modalIngreso" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Ingreso de producto al almacén</h2>
+                            <span class="close-modal">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formIngreso">
+                                <input type="hidden" id="ingItem_id">
+                                <input type="hidden" id="ingWarehouse_id">
+
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 3;">
+                                        <label>Producto</label>
+                                        <input type="text" id="ingItemName" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group" style="flex: 1; min-width: 100px;">
+                                        <label>Cantidad</label>
+                                        <input type="number" id="ingQuantity" class="form-control" step="0.01" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Almacén</label>
+                                    <input type="text" id="ingWarehouseName" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Motivo traslado</label>
+                                    <select id="ingTransactionId" class="form-control">
+                                        <option value="19">Ingreso de Producción</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Comentarios</label>
+                                    <textarea id="ingComments" class="form-control" rows="2"></textarea>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-close close-modal">Cancelar</button>
+                                    <button type="submit" id="btnSubmitIngreso" class="btn btn-primary">Aceptar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Almacenes -->
+            <section id="view-warehouses" class="view-section">
+                <div class="container">
+                    <div class="header-actions">
+                        <div>
+                            <h1>🏢 Almacenes</h1>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="table-container">
+                        <table id="warehousesTable" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Alias</th>
+                                    <th>Cantidad de Items</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data loaded via AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Catálogo / Orígenes -->
+            <section id="view-catalog" class="view-section">
+                <div class="container">
+                    <div class="header-actions">
+                        <div>
+                            <h1>📦 Catálogo / Orígenes</h1>
+                            <p style="color: #666; margin-top: 5px;">Asigna el almacén de origen para reservas automáticas.</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="file" id="excelImportInput" accept=".xlsx, .xls, .csv" style="display: none;">
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('excelImportInput').click()" style="display: flex; align-items: center; gap: 8px; font-weight: bold;">
+                                📂 Importar Excel / CSV
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="table-container">
+                        <table id="catalogTable" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID Interno</th>
+                                    <th>Nombre</th>
+                                    <th>Almacén Origen Actual</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Configuración -->
+            <section id="view-config" class="view-section">
+                <div class="container">
+                    <div class="header-actions">
+                        <div>
+                            <h1>⚙️ Configuración del Sistema</h1>
+                            <p style="color: #666; margin-top: 5px;">Configura las credenciales de Volper Seal para sincronizar datos y realizar movimientos.</p>
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div style="background: #fff; padding: 25px; border-radius: 12px; border: 1px solid #edf2f7; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 700px; margin: 0 auto;">
+                        <h2 style="margin-bottom: 20px; color: #2d3748; font-size: 1.25rem; font-weight: 600; border-bottom: 2px solid #edf2f7; padding-bottom: 10px;">🔑 Credenciales de Volper Seal</h2>
+                        
+                        <form id="formConfigCredentials">
+                            <!-- Rol: Ventas / Administrador -->
+                            <div style="margin-bottom: 25px; background: #f7fafc; padding: 15px; border-radius: 8px; border: 1px solid #edf2f7;">
+                                <h3 style="margin-top: 0; color: #2b6cb0; font-size: 1rem; font-weight: 700; margin-bottom: 12px;">📊 Cuenta de Ventas / Administrador</h3>
+                                <p style="font-size: 0.85rem; color: #718096; margin-bottom: 12px;">Esta cuenta se utiliza para importar cotizaciones del sistema y sincronizar facturas masivamente.</p>
+                                <div class="form-row" style="display: flex; gap: 15px; flex-direction: row;">
+                                    <div class="form-group" style="flex: 1;">
+                                        <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 5px; text-align: left;">Correo de Ventas:</label>
+                                        <input type="email" id="configVentasEmail" class="form-control" placeholder="ventas@volperseal.com" required style="width: 100%;">
+                                    </div>
+                                    <div class="form-group" style="flex: 1;">
+                                        <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 5px; text-align: left;">Contraseña:</label>
+                                        <input type="password" id="configVentasPassword" class="form-control" placeholder="••••••••" required style="width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Rol: Almacén -->
+                            <div style="margin-bottom: 25px; background: #f7fafc; padding: 15px; border-radius: 8px; border: 1px solid #edf2f7;">
+                                <h3 style="margin-top: 0; color: #dd6b20; font-size: 1rem; font-weight: 700; margin-bottom: 12px;">🏢 Cuenta de Almacén</h3>
+                                <p style="font-size: 0.85rem; color: #718096; margin-bottom: 12px;">Esta cuenta se utiliza para registrar ingresos de productos (traslados, producciones) en el inventario real de Volper.</p>
+                                <div class="form-row" style="display: flex; gap: 15px; flex-direction: row;">
+                                    <div class="form-group" style="flex: 1;">
+                                        <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 5px; text-align: left;">Correo de Almacén:</label>
+                                        <input type="email" id="configAlmacenEmail" class="form-control" placeholder="almacen@volperseal.com" required style="width: 100%;">
+                                    </div>
+                                    <div class="form-group" style="flex: 1;">
+                                        <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 5px; text-align: left;">Contraseña:</label>
+                                        <input type="password" id="configAlmacenPassword" class="form-control" placeholder="••••••••" required style="width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                                <button type="submit" id="btnSaveConfig" class="btn btn-primary" style="padding: 10px 24px; border-radius: 6px; font-weight: bold; width: auto; cursor: pointer;">💾 Guardar Configuración</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div id="modalIngreso" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Ingreso de producto al almacén</h2>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formIngreso">
+                            <input type="hidden" id="ingItem_id">
+                            <input type="hidden" id="ingWarehouse_id">
+
+                            <div class="form-row">
+                                <div class="form-group" style="flex: 3;">
+                                    <label>Producto</label>
+                                    <input type="text" id="ingItemName" class="form-control" readonly>
+                                </div>
+                                <div class="form-group" style="flex: 1; min-width: 100px;">
+                                    <label>Cantidad</label>
+                                    <input type="number" id="ingQuantity" class="form-control" step="0.01" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Almacén</label>
+                                <input type="text" id="ingWarehouseName" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Motivo traslado</label>
+                                <select id="ingTransactionId" class="form-control">
+                                    <option value="19">Ingreso de Producción</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Comentarios</label>
+                                <textarea id="ingComments" class="form-control" rows="2"></textarea>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-close close-modal">Cancelar</button>
+                                <button type="submit" id="btnSubmitIngreso" class="btn btn-primary">Aceptar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </section>
 
-    </main>
+            <!-- Modal Eliminar Cotización -->
+            <div id="modalDeleteQuotation" class="modal" style="display: none;">
+                <div class="modal-content" style="max-width: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+                    <div class="modal-header" style="background: var(--danger-color); color: #fff; padding: 15px 20px;">
+                        <h2 style="margin: 0; font-size: 1.35rem; font-weight: 600; display: flex; align-items: center; gap: 10px;">🗑️ Eliminar Cotización</h2>
+                        <span class="close-modal-delete" style="font-size: 26px; font-weight: bold; cursor: pointer; color: #fff; line-height: 1;">&times;</span>
+                    </div>
+                    <div class="modal-body" style="padding: 20px;">
+                        <p style="margin-bottom: 20px; color: #4a5568; font-size: 0.95rem; line-height: 1.5;">
+                            Ingresa el número de cotización que deseas eliminar de la base de datos local. 
+                            <strong style="color: var(--danger-color); display: block; margin-top: 8px;">⚠️ Esta acción liberará el stock reservado y no se puede deshacer.</strong>
+                        </p>
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label style="font-weight: 700; color: #2d3748; margin-bottom: 8px; display: block; font-size: 0.9rem;">Número de Cotización:</label>
+                            <input type="number" id="deleteQuotationInput" placeholder="Ej: 1533" class="form-control" style="width: 100%; padding: 10px 14px; font-size: 1rem; border-radius: 6px;">
+                        </div>
+                        <div class="modal-footer" style="padding: 10px 0 0 0; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #edf2f7; margin-top: 15px;">
+                            <button type="button" class="btn btn-secondary close-modal-delete" style="padding: 8px 16px; border-radius: 6px; font-weight: 500;">Cancelar</button>
+                            <button type="button" id="btnSubmitDeleteQuotation" class="btn btn-danger" style="padding: 8px 16px; border-radius: 6px; font-weight: 500;">Confirmar Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Vista Previa de PDF -->
+            <div id="modalPdfPreview" class="modal" style="display: none; background: rgba(0, 0, 0, 0.6); z-index: 10000; overflow-y: auto;">
+                <div class="modal-content" style="max-width: 890px; width: 95%; margin: 30px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.3);">
+                    <div class="modal-header" style="background: #1a365d; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;">
+                        <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">📄 Vista Previa de la Guía</h2>
+                        <span class="close-modal-preview" style="font-size: 28px; font-weight: bold; cursor: pointer; color: #fff; line-height: 1;">&times;</span>
+                    </div>
+                    <div class="modal-body" style="background: #718096; padding: 15px; display: flex; justify-content: center; overflow-y: hidden;">
+                        <!-- Contenedor del Iframe de PDF para previsualización nativa selectable -->
+                        <div id="pdfPreviewSheet" style="width: 100%; height: 100%; background: #ffffff; box-shadow: 0 4px 25px rgba(0,0,0,0.25); box-sizing: border-box; border-radius: 6px; border: 1px solid #cbd5e0; overflow: hidden;">
+                            <iframe id="pdfPreviewIframe" style="width: 100%; height: 100%; border: none;"></iframe>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="background: #f7fafc; padding: 15px 20px; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid #e2e8f0;">
+                        <button type="button" class="btn btn-secondary close-modal-preview" style="padding: 8px 16px; border-radius: 6px; font-weight: 500;">Cerrar</button>
+                        <button type="button" id="btnDownloadPdfActual" class="btn btn-primary" style="padding: 8px 16px; border-radius: 6px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;">
+                            📥 Descargar PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </section>
+
+        </main>
+    </div> <!-- End App Container -->
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/pdf-generator.js"></script>
     <script src="js/app.js"></script>
 
 </body>

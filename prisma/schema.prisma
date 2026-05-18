@@ -20,6 +20,7 @@ model Product {
   purchasePrice       Float    
   currency            String   @default("PEN")
   warehouse           String?  
+  originWarehouse     String?  // Almacén de extracción por defecto (ej: "2do Piso")
   model               String?   // <--- ASEGÚRATE QUE ESTÉ ESTO
   brand               String?   // <--- Y ESTO
   
@@ -49,7 +50,12 @@ model Quotation {
   date          String          // 2026-04-30
   time          String          // 17:34:32
   customerName  String          // HYDRAULIC HOUSE JIREH E.I.R.L.
+  customerRuc   String?         // Documento del cliente (RUC o DNI)
   address       String          // AV. LAS TORRES MZ. K LT. 1 OTR. LURIGANCHO
+  status        String          @default("PENDIENTE") // PENDIENTE, RESERVADO, FACTURADO
+  documentRef   String?         // Guarda factura o nota de venta (ej: NV01-27)
+  sellerName    String?         // Nombre del vendedor (ej: Joselin Ramirez Inga)
+  description   String?         // Observación de la cotización (ej: VD: Patricia Vargas)
   items         QuotationItem[]
   createdAt     DateTime        @default(now())
 }
@@ -62,4 +68,13 @@ model QuotationItem {
   quantity    Float     // Cantidad requerida
   stockSystem Float     // Stock físico actual en el almacén principal
   quotation   Quotation @relation(fields: [quotationId], references: [id])
+}
+
+model Warehouse {
+  id          Int      @id
+  name        String
+  alias       String?
+  itemCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const axios = require('axios');
 const { wrapper } = require('axios-cookiejar-support');
 const { CookieJar } = require('tough-cookie');
@@ -24,12 +25,24 @@ async function iniciarExtraccionMovimientos() {
         if (!csrfToken) throw new Error("No se pudo extraer el Token CSRF. Revisa la URL.");
         console.log("✅ Token obtenido:", csrfToken);
 
+        const email = process.env.API_EMAIL;
+        const password = process.env.API_PASSWORD;
+
+        if (!email || !password) {
+            throw new Error("Las credenciales (API_EMAIL, API_PASSWORD) no están definidas.");
+        }
+
         console.log("--- 🔑 Paso 2: Autenticando en Volper Seal ---");
-        await client.post('/login', new URLSearchParams({
+        const loginResponse = await client.post('/login', new URLSearchParams({
             '_token': csrfToken,
-            'email': 'administrador@volperseal.com',
-            'password': '554volperseal'
+            'email': email,
+            'password': password
         }));
+
+        const finalUrl = loginResponse.request.res ? loginResponse.request.res.responseUrl : loginResponse.request.path;
+        if (finalUrl && finalUrl.endsWith('/login')) {
+             throw new Error("Credenciales invalidas");
+        }
         console.log("✅ Sesión iniciada con éxito.");
 
         console.log("--- 🔄 Paso 3: Iniciando extracción de movimientos ---");
