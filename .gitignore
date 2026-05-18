@@ -2,3 +2,6 @@ node_modules
 .env
 product.json
 movimiento.json
+credentials.json
+error1.txt
+error2.txt
