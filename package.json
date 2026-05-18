@@ -3,19 +3,20 @@
   "version": "1.0.0",
   "main": "import.js",
   "scripts": {
-    "start": "npx prisma generate && node server.js"
+    "build": "npx prisma generate",
+    "start": "node server.js"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "axios": "^1.15.2",
     "axios-cookiejar-support": "^4.0.7",
     "cheerio": "^1.2.0",
     "express": "^5.2.1",
+    "prisma": "^6.19.3",
     "tough-cookie": "^4.1.4"
   },
   "devDependencies": {
-    "@prisma/client": "^6.19.3",
     "@types/node": "^25.6.0",
-    "prisma": "^6.19.3",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
   }
