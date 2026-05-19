@@ -14,6 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({
@@ -108,11 +109,11 @@ app.get('/api/update-catalog', (req, res) => {
     console.log("🚀 Iniciando actualización manual desde la web...");
 
     const creds = getSavedCredentials();
-    if (!creds.ventasEmail || !creds.ventasPassword) {
-        return res.status(400).json({ success: false, message: "Faltan configurar las credenciales de Ventas/Administrador." });
+    if (!creds.almacenEmail || !creds.almacenPassword) {
+        return res.status(400).json({ success: false, message: "Faltan configurar las credenciales de Almacén." });
     }
 
-    const env = { ...process.env, API_EMAIL: creds.ventasEmail, API_PASSWORD: creds.ventasPassword };
+    const env = { ...process.env, API_EMAIL: creds.almacenEmail, API_PASSWORD: creds.almacenPassword };
     exec('node scripts/extraer_auto.js && node scripts/import.js && node scripts/update_warehouses.js', { env }, (error, stdout, stderr) => {
         if (error) {
             console.error(`❌ Error: ${error.message}`);
@@ -127,12 +128,15 @@ app.get('/api/update-movimientos', (req, res) => {
     console.log("🚀 Iniciando extracción de movimientos...");
 
     const creds = getSavedCredentials();
-    if (!creds.ventasEmail || !creds.ventasPassword) {
-        return res.status(400).json({ success: false, message: "Faltan configurar las credenciales de Ventas/Administrador." });
+    if (!creds.almacenEmail || !creds.almacenPassword) {
+        return res.status(400).json({ success: false, message: "Faltan configurar las credenciales de Almacén." });
     }
 
-    const env = { ...process.env, API_EMAIL: creds.ventasEmail, API_PASSWORD: creds.ventasPassword };
+    const env = { ...process.env, API_EMAIL: creds.almacenEmail, API_PASSWORD: creds.almacenPassword };
     exec('node scripts/extraer_movimiento.js && node scripts/update_warehouses.js', { env }, (error, stdout, stderr) => {
+        if (stdout) console.log(`[Movimientos stdout]:\n${stdout}`);
+        if (stderr) console.error(`[Movimientos stderr]:\n${stderr}`);
+        
         if (error) {
             console.error(`❌ Error: ${error.message}`);
             return res.status(500).json({ success: false, message: error.message });
@@ -191,10 +195,21 @@ app.get('/api/products', async (req, res) => {
         });
 
         const jsonPath = path.join(__dirname, 'product.json');
+        let useJson = false;
+        let dataArray = [];
         if (fs.existsSync(jsonPath)) {
-            const rawData = fs.readFileSync(jsonPath, 'utf8');
-            const dataArray = JSON.parse(rawData);
+            try {
+                const rawData = fs.readFileSync(jsonPath, 'utf8');
+                dataArray = JSON.parse(rawData);
+                if (Array.isArray(dataArray) && dataArray.length > 0) {
+                    useJson = true;
+                }
+            } catch (e) {
+                console.error("Error reading product.json:", e);
+            }
+        }
 
+        if (useJson) {
             // Agrupar filas por internal_id
             const productsById = {};
             dataArray.forEach(p => {
@@ -233,8 +248,24 @@ app.get('/api/products', async (req, res) => {
             res.setHeader('Content-Type', 'application/json');
             return res.send(JSON.stringify(dataArray));
         } else {
-            // Fallback base de datos
-            res.json(dbProducts);
+            // Fallback base de datos completo y mapeado para DataTable
+            const allDbProducts = await prisma.product.findMany({
+                orderBy: { name: 'asc' }
+            });
+            const mappedProducts = allDbProducts.map(p => {
+                const resQ = reservationMap[p.internal_id] || 0;
+                return {
+                    internal_id: p.internal_id,
+                    name: p.name,
+                    item_category_name: p.category || 'Sin Categoría',
+                    stock: p.stock || 0,
+                    reserva: resQ,
+                    stockDiferencia: p.stock - resQ,
+                    warehouse_name: p.warehouse || 'Principal'
+                };
+            });
+            res.setHeader('Content-Type', 'application/json');
+            return res.send(JSON.stringify(mappedProducts));
         }
     } catch (error) {
         console.error("❌ Error:", error);

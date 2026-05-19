@@ -57,6 +57,14 @@ async function iniciarMision() {
             const url = `/inventory/report/records?active&brand_id&category_id&filter=01&page=${paginaActual}&warehouse_id=all`;
 
             const response = await client.get(url);
+            
+            // Diagnóstico si la respuesta no es JSON o no tiene la estructura esperada
+            if (typeof response.data === 'string' && response.data.includes('<!DOCTYPE html>')) {
+                console.error(`⚠️ Alerta: El servidor de Volper redirigió a la página de Login en la página ${paginaActual}. La sesión expiró o las cookies no se enviaron.`);
+                hayMasPaginas = false;
+                break;
+            }
+
             const data = response.data.data;
 
             if (data && data.length > 0) {
@@ -72,6 +80,7 @@ async function iniciarMision() {
                     hayMasPaginas = false; // Llegamos al final
                 }
             } else {
+                console.log(`⚠️ Advertencia: No se encontraron datos en la página ${paginaActual}. Respuesta:`, JSON.stringify(response.data).substring(0, 150));
                 hayMasPaginas = false;
             }
         }

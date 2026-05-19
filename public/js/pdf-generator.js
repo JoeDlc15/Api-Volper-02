@@ -16,18 +16,25 @@ window.generarCotizacionPDF = function (data) {
         format: 'a4'
     });
 
-    // 1. --- DIBUJAR LOGOTIPO VECTORIAL (ENGRANAJE VERDE) ---
-    // Círculos concéntricos verdes (#22c55e)
-    doc.setDrawColor(34, 197, 94);
-    doc.setLineWidth(1.0);
-    doc.circle(28, 25, 9, 'S'); // Radio 9
-    doc.circle(28, 25, 6, 'S'); // Radio 6
+    // 1. --- LOGOTIPO DE LA EMPRESA ---
+    const logoImg = document.getElementById('companyLogo');
+    if (logoImg && logoImg.complete && logoImg.naturalWidth !== 0) {
+        // Dibujar el logo real de la carpeta assets
+        doc.addImage(logoImg, 'PNG', 15, 15, 20, 20);
+    } else {
+        // Fallback: Dibujar logotipo vectorial si el PNG no se cargó correctamente
+        // Círculos concéntricos verdes (#22c55e)
+        doc.setDrawColor(34, 197, 94);
+        doc.setLineWidth(1.0);
+        doc.circle(28, 25, 9, 'S'); // Radio 9
+        doc.circle(28, 25, 6, 'S'); // Radio 6
 
-    // Líneas del engranaje interior (Letra K)
-    doc.setLineWidth(2.2);
-    doc.line(25.5, 19, 25.5, 31);    // Línea vertical
-    doc.line(25.5, 25, 30.5, 19);    // Diagonal superior
-    doc.line(25.5, 25, 30.5, 31);    // Diagonal inferior
+        // Líneas del engranaje interior (Letra K)
+        doc.setLineWidth(2.2);
+        doc.line(25.5, 19, 25.5, 31);    // Línea vertical
+        doc.line(25.5, 25, 30.5, 19);    // Diagonal superior
+        doc.line(25.5, 25, 30.5, 31);    // Diagonal inferior
+    }
 
     // 2. --- TEXTO DE LA EMPRESA ---
     doc.setFont("Helvetica", "bold");
@@ -49,7 +56,7 @@ window.generarCotizacionPDF = function (data) {
     // 3. --- RECUADRO DE RUC / NÚMERO DE COTIZACIÓN ---
     doc.setDrawColor(45, 55, 72); // #2d3748
     doc.setLineWidth(0.5);
-    doc.rect(138, 12, 57, 26, 'S');
+    doc.rect(138, 12, 57, 23, 'S');
 
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(9);
@@ -69,12 +76,12 @@ window.generarCotizacionPDF = function (data) {
     const horaEmision = data.time || '12:00:00';
 
     doc.autoTable({
-        startY: 44,
+        startY: 40,
         margin: { left: 15, right: 15 },
         theme: 'plain',
         styles: {
             fontSize: 8,
-            cellPadding: 0.8,
+            cellPadding: 0.5,
             textColor: [45, 55, 72],
             font: 'Helvetica'
         },
@@ -95,7 +102,7 @@ window.generarCotizacionPDF = function (data) {
     });
 
     // Dibujar línea divisora horizontal
-    const dividerY = doc.lastAutoTable.finalY + 3;
+    const dividerY = doc.lastAutoTable.finalY + 1.5;
     doc.setDrawColor(113, 128, 150); // #718096
     doc.setLineWidth(0.2);
     doc.line(15, dividerY, 195, dividerY);
@@ -104,13 +111,14 @@ window.generarCotizacionPDF = function (data) {
     const tableBody = data.items.map(item => [
         item.quantity.toString(),
         "NIU",
-        item.description
+        item.description,
+        "" // Celda vacía para rellenado manual
     ]);
 
     doc.autoTable({
-        startY: dividerY + 4,
+        startY: dividerY + 1.5,
         margin: { left: 15, right: 15 },
-        head: [["CAN", "UNI", "PRODUCTO"]],
+        head: [["CAN", "UNI", "PRODUCTO", "OBSERVACIÓN / FALTANTE"]],
         body: tableBody,
         theme: 'striped',
         headStyles: {
@@ -121,18 +129,31 @@ window.generarCotizacionPDF = function (data) {
             halign: 'center'
         },
         columnStyles: {
-            0: { cellWidth: 15, halign: 'center', fontStyle: 'bold' },
-            1: { cellWidth: 15, halign: 'center' },
-            2: { cellWidth: 150, halign: 'left' }
+            0: { cellWidth: 12, halign: 'center', fontStyle: 'bold' },
+            1: { cellWidth: 12, halign: 'center' },
+            2: { cellWidth: 94, halign: 'left' },
+            3: { cellWidth: 60, halign: 'center' }
         },
         styles: {
             fontSize: 8.5,
-            cellPadding: 2.5,
+            cellPadding: 1.2,
             textColor: [45, 55, 72],
             valign: 'middle'
         },
         alternateRowStyles: {
             fillColor: [247, 250, 252] // Sombreado alterno suave
+        },
+        didDrawCell: function (data) {
+            // Dibujar una línea horizontal separadora en la parte inferior de cada celda
+            const doc = data.doc;
+            doc.setDrawColor(180, 180, 180); // Gris medio suave para guiar la escritura
+            doc.setLineWidth(0.1);
+            doc.line(
+                data.cell.x,
+                data.cell.y + data.cell.height,
+                data.cell.x + data.cell.width,
+                data.cell.y + data.cell.height
+            );
         }
     });
 
