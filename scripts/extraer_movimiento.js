@@ -84,6 +84,8 @@ async function iniciarExtraccionMovimientos() {
 
                 if (paginaActual < totalPaginas) {
                     paginaActual++;
+                    // Pausa de cortesía (600ms) para respetar el servidor de Volper
+                    await new Promise(r => setTimeout(r, 600));
                 } else {
                     hayMasPaginas = false;
                 }

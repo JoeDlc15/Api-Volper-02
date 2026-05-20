@@ -596,3 +596,14 @@ table.dataTable tbody td {
     justify-content: flex-end;
     gap: 12px;
 }
+
+/* Modal de Ingreso de Producto Custom Sizing */
+#modalIngreso .modal-content {
+    max-width: 800px; /* Incrementado en 1/3 (de 600px a 800px) */
+    width: 95%;
+}
+
+#modalIngreso .form-control {
+    min-width: 0 !important;
+    max-width: none !important;
+}

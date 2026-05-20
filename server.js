@@ -152,7 +152,20 @@ app.get('/api/movimientos', (req, res) => {
         if (fs.existsSync(filePath)) {
             const data = fs.readFileSync(filePath, 'utf-8');
             const parsed = JSON.parse(data);
-            res.json(parsed.data ? parsed.data : parsed);
+            const dataArray = parsed.data ? parsed.data : parsed;
+
+            // Deduplicar movimientos por combinación única de item_internal_id y warehouse_description
+            const seen = new Set();
+            const deduplicated = [];
+            for (const p of dataArray) {
+                if (!p.item_internal_id) continue;
+                const key = `${p.item_internal_id}-${p.warehouse_description || 'Principal'}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    deduplicated.push(p);
+                }
+            }
+            res.json(deduplicated);
         } else {
             res.json([]);
         }
@@ -200,8 +213,20 @@ app.get('/api/products', async (req, res) => {
         if (fs.existsSync(jsonPath)) {
             try {
                 const rawData = fs.readFileSync(jsonPath, 'utf8');
-                dataArray = JSON.parse(rawData);
-                if (Array.isArray(dataArray) && dataArray.length > 0) {
+                const parsedData = JSON.parse(rawData);
+                if (Array.isArray(parsedData) && parsedData.length > 0) {
+                    // Deduplicar productos por combinación única de internal_id y warehouse_name
+                    const seen = new Set();
+                    const deduplicated = [];
+                    for (const p of parsedData) {
+                        if (!p.internal_id) continue;
+                        const key = `${p.internal_id}-${p.warehouse_name || 'Principal'}`;
+                        if (!seen.has(key)) {
+                            seen.add(key);
+                            deduplicated.push(p);
+                        }
+                    }
+                    dataArray = deduplicated;
                     useJson = true;
                 }
             } catch (e) {

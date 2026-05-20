@@ -45,47 +45,52 @@ async function iniciarMision() {
         }
         console.log("✅ Sesión iniciada con éxito.");
 
-        console.log("--- 🔄 Paso 3: Iniciando extracción masiva (35 páginas aprox.) ---");
+        console.log("--- 🔄 Paso 3: Iniciando extracción masiva por almacenes (1 y 3) ---");
 
         let todosLosProductos = [];
-        let paginaActual = 1;
-        let hayMasPaginas = true;
+        const warehouses = [1, 3];
 
-        while (hayMasPaginas) {
-            // Usamos la URL que identificaste en el navegador
-            // La URL obtiene los datos de todos los almacenes
-            const url = `/inventory/report/records?active&brand_id&category_id&filter=01&page=${paginaActual}&warehouse_id=all`;
+        for (const whId of warehouses) {
+            console.log(`\n--- 🔄 Iniciando extracción para almacén ID: ${whId} ---`);
+            let paginaActual = 1;
+            let hayMasPaginas = true;
 
-            const response = await client.get(url);
-            
-            // Diagnóstico si la respuesta no es JSON o no tiene la estructura esperada
-            if (typeof response.data === 'string' && response.data.includes('<!DOCTYPE html>')) {
-                console.error(`⚠️ Alerta: El servidor de Volper redirigió a la página de Login en la página ${paginaActual}. La sesión expiró o las cookies no se enviaron.`);
-                hayMasPaginas = false;
-                break;
-            }
-
-            const data = response.data.data;
-
-            if (data && data.length > 0) {
-                todosLosProductos = todosLosProductos.concat(data);
-                console.log(`📥 Página ${paginaActual} extraída (${todosLosProductos.length} productos acumulados)`);
-
-                // Leemos el total de páginas desde la metadata de la API
-                const totalPaginas = response.data.meta.last_page;
-
-                if (paginaActual < totalPaginas) {
-                    paginaActual++;
-                } else {
-                    hayMasPaginas = false; // Llegamos al final
+            while (hayMasPaginas) {
+                const url = `/inventory/report/records?active&brand_id&category_id&filter=01&page=${paginaActual}&warehouse_id=${whId}`;
+                const response = await client.get(url);
+                
+                if (typeof response.data === 'string' && response.data.includes('<!DOCTYPE html>')) {
+                    console.error(`⚠️ Alerta: El servidor de Volper redirigió a la página de Login en la página ${paginaActual}. La sesión expiró.`);
+                    hayMasPaginas = false;
+                    break;
                 }
-            } else {
-                console.log(`⚠️ Advertencia: No se encontraron datos en la página ${paginaActual}. Respuesta:`, JSON.stringify(response.data).substring(0, 150));
-                hayMasPaginas = false;
+
+                const data = response.data.data;
+
+                if (data && data.length > 0) {
+                    // Forzar a que cada ítem guarde el warehouse_name correspondiente
+                    data.forEach(item => {
+                        item.warehouse_name = whId === 1 ? "Almacén - Almacén principal" : "Almacén - ALMACEN 2DO. PISO";
+                    });
+
+                    todosLosProductos = todosLosProductos.concat(data);
+                    console.log(`📥 Almacén ${whId} - Página ${paginaActual} extraída (${todosLosProductos.length} productos acumulados)`);
+
+                    const totalPaginas = response.data.meta.last_page;
+
+                    if (paginaActual < totalPaginas) {
+                        paginaActual++;
+                        await new Promise(r => setTimeout(r, 600));
+                    } else {
+                        hayMasPaginas = false;
+                    }
+                } else {
+                    hayMasPaginas = false;
+                }
             }
         }
 
-        console.log(`✅ ¡Misión completa! Total final: ${todosLosProductos.length} productos.`);
+        console.log(`\n✅ ¡Misión completa! Total final: ${todosLosProductos.length} productos.`);
 
         // 4. Guardar TODO el array masivo en la raíz del proyecto
         const jsonPath = path.join(__dirname, '../product.json');

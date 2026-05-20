@@ -401,6 +401,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     render: function (data, type, row) {
                         return `<button class="btn btn-primary btn-ingreso" style="padding: 5px 10px; font-size: 0.8rem;" 
                                 data-item_id="${row.item_id}" 
+                                data-item_code="${row.item_internal_id}" 
                                 data-item_desc="${row.item_description}" 
                                 data-wh_id="${row.warehouse_id}" 
                                 data-wh_desc="${row.warehouse_description}">➕ Ingreso</button>`;
@@ -703,15 +704,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    let clickedRowRef = null;
+
     // Modal Ingreso Logic
     $('#movimientosTable').on('click', '.btn-ingreso', function() {
-        const item_id = $(this).data('item_id');
-        const item_desc = $(this).data('item_desc');
-        const wh_id = $(this).data('wh_id');
-        const wh_desc = $(this).data('wh_desc');
+        const btn = $(this);
+        clickedRowRef = tableMovimientos.row(btn.parents('tr'));
+
+        const item_id = btn.data('item_id');
+        const item_code = btn.data('item_code');
+        const item_desc = btn.data('item_desc');
+        const wh_id = btn.data('wh_id');
+        const wh_desc = btn.data('wh_desc');
 
         $('#ingItem_id').val(item_id);
-        $('#ingItemName').val(item_desc);
+        $('#ingItemName').val(`${item_code} - ${item_desc}`);
         $('#ingWarehouse_id').val(wh_id);
         $('#ingWarehouseName').val(wh_desc);
         $('#ingQuantity').val('');
@@ -724,8 +731,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         $('#modalIngreso').css('display', 'none');
     });
 
+    let isSubmitting = false;
+
     $('#formIngreso').submit(async function(e) {
         e.preventDefault();
+        if (isSubmitting) return; // Evitar doble submit por doble clic
+        isSubmitting = true;
+
         const btn = $('#btnSubmitIngreso');
         btn.prop('disabled', true).text('Guardando...');
 
@@ -745,15 +757,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             const data = await res.json();
             if (res.ok && data.success) {
-                alert("✅ Ingreso registrado exitosamente");
-                $('#modalIngreso').css('display', 'none');
+                window.showToast("Ingreso registrado exitosamente", "success");
+                
+                // Actualizar localmente la fila en la tabla de movimientos
+                if (clickedRowRef) {
+                    const rowData = clickedRowRef.data();
+                    const qty = parseFloat(payload.quantity) || 0;
+                    rowData.stock = (parseFloat(rowData.stock) || 0) + qty;
+                    clickedRowRef.data(rowData).draw(false);
+                }
+                
+                // Cerrar modal al cabo de unos segundos
+                setTimeout(() => {
+                    $('#modalIngreso').css('display', 'none');
+                }, 1500);
             } else {
-                alert("❌ Error: " + (data.error || "No se pudo registrar"));
+                window.showToast("Error: " + (data.error || "No se pudo registrar"), "error");
             }
         } catch (err) {
-            alert("❌ Error de red");
+            window.showToast("Error de conexión o red", "error");
         } finally {
             btn.prop('disabled', false).text('Aceptar');
+            isSubmitting = false; // Resetear guardia
         }
     });
 
