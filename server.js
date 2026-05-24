@@ -49,7 +49,7 @@ function saveSavedCredentials(creds) {
 
 // Bypasseamos el control de sesión ya que la app corre localmente sin login
 function getUser(req) {
-    return { email: "config@config.com" }; 
+    return { email: "config@config.com" };
 }
 
 // Función para asegurar login con credenciales dinámicas en Volper
@@ -88,17 +88,17 @@ app.get('/api/config/credentials', (req, res) => {
 app.post('/api/config/credentials', (req, res) => {
     const { ventasEmail, ventasPassword, almacenEmail, almacenPassword } = req.body;
     const creds = getSavedCredentials();
-    
+
     if (ventasEmail !== undefined) creds.ventasEmail = ventasEmail;
     if (ventasPassword !== undefined && ventasPassword !== "••••••••" && ventasPassword !== "") {
         creds.ventasPassword = ventasPassword;
     }
-    
+
     if (almacenEmail !== undefined) creds.almacenEmail = almacenEmail;
     if (almacenPassword !== undefined && almacenPassword !== "••••••••" && almacenPassword !== "") {
         creds.almacenPassword = almacenPassword;
     }
-    
+
     saveSavedCredentials(creds);
     res.json({ success: true, message: "Configuración guardada correctamente." });
 });
@@ -136,7 +136,7 @@ app.get('/api/update-movimientos', (req, res) => {
     exec('node scripts/extraer_movimiento.js && node scripts/update_warehouses.js', { env }, (error, stdout, stderr) => {
         if (stdout) console.log(`[Movimientos stdout]:\n${stdout}`);
         if (stderr) console.error(`[Movimientos stderr]:\n${stderr}`);
-        
+
         if (error) {
             console.error(`❌ Error: ${error.message}`);
             return res.status(500).json({ success: false, message: error.message });
@@ -381,10 +381,10 @@ app.post('/api/add-quotation', (req, res) => {
     exec(`node scripts/extraer_cotizacion.js ${quotationNumber}`, { env }, (error, stdout, stderr) => {
         if (stdout) console.log(`[Script stdout]:\n${stdout}`);
         if (stderr) console.error(`[Script stderr]:\n${stderr}`);
-        
+
         if (error) {
             console.error(`❌ Error: ${error.message}`);
-            
+
             // Extraer el mensaje específico del error
             let userError = "Error interno al extraer la cotización o credenciales inválidas.";
             if (stdout.includes("El usuario no tiene permisos")) {
@@ -415,17 +415,214 @@ app.post('/api/sync-invoices', async (req, res) => {
     exec('node scripts/sync_facturados.js', { env }, (error, stdout, stderr) => {
         if (stdout) console.log(`[Sync stdout]:\n${stdout}`);
         if (stderr) console.error(`[Sync stderr]:\n${stderr}`);
-        
+
         if (error) {
             console.error(`❌ Error en sincronización: ${error.message}`);
             return res.status(500).json({ success: false, error: "Error al sincronizar facturas. Verifica las credenciales de Ventas." });
         }
-        
+
         const match = stdout.match(/FACTURADO:\s(\d+)/);
         const updatedCount = match ? match[1] : 0;
-        
+
         res.json({ success: true, updatedCount });
     });
+});
+
+// --- ENDPOINTS PARA COTIZACIONES POR CLIENTE ---
+
+// Obtener registros importados de cotizaciones por cliente
+app.get('/api/customer-quotations', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'customer_quotations.json');
+        if (fs.existsSync(filePath)) {
+            const data = fs.readFileSync(filePath, 'utf-8');
+            return res.json(JSON.parse(data));
+        }
+        res.json([]);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Obtener progreso de la importación
+app.get('/api/import-customer-progress', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'scripts', 'import_progress.json');
+        if (fs.existsSync(filePath)) {
+            const data = fs.readFileSync(filePath, 'utf-8');
+            return res.json(JSON.parse(data));
+        }
+        res.json({ status: "idle", message: "Listo para iniciar." });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Iniciar importación de cotizaciones de cliente de forma asíncrona
+app.post('/api/import-customer-quotations', (req, res) => {
+    const { query } = req.body;
+    if (!query || query.trim() === "") {
+        return res.status(400).json({ success: false, error: "Debes proporcionar un nombre o RUC de cliente." });
+    }
+
+    const creds = getSavedCredentials();
+    if (!creds.ventasEmail || !creds.ventasPassword) {
+        return res.status(400).json({ success: false, error: "Faltan configurar las credenciales de Ventas/Administrador." });
+    }
+
+    const progressPath = path.join(__dirname, 'scripts', 'import_progress.json');
+    fs.writeFileSync(progressPath, JSON.stringify({ status: "running", current: 0, total: 0, currentQuotation: "", message: "🕵️ Iniciando..." }, null, 2));
+
+    const env = { ...process.env, API_EMAIL: creds.ventasEmail, API_PASSWORD: creds.ventasPassword };
+
+    // Ejecutar en segundo plano asíncronamente
+    exec(`node scripts/extraer_cotizaciones_cliente.js "${query}"`, { env }, (error, stdout, stderr) => {
+        if (stdout) console.log(`[Customer Quotations Script stdout]:\n${stdout}`);
+        if (stderr) console.error(`[Customer Quotations Script stderr]:\n${stderr}`);
+        if (error) {
+            console.error(`❌ Error en script de cotizaciones de cliente: ${error.message}`);
+            fs.writeFileSync(progressPath, JSON.stringify({ status: "error", message: `❌ Error: ${error.message}` }, null, 2));
+        }
+    });
+
+    res.json({ success: true, message: "Importación iniciada en segundo plano." });
+});
+
+// Limpiar registros o un cliente en específico
+app.delete('/api/customer-quotations', (req, res) => {
+    const user = getUser(req);
+    if (!user) return res.status(401).json({ success: false, error: "Sesión no válida" });
+
+    const { customer_name } = req.body;
+    const filePath = path.join(__dirname, 'customer_quotations.json');
+
+    try {
+        if (!fs.existsSync(filePath)) {
+            return res.json({ success: true, message: "No había registros para eliminar." });
+        }
+
+        if (customer_name) {
+            // Eliminar solo las de ese cliente
+            const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+            const filtered = data.filter(r => r.customer_name.toLowerCase() !== customer_name.toLowerCase());
+            fs.writeFileSync(filePath, JSON.stringify(filtered, null, 2));
+            res.json({ success: true, message: `Registros de ${customer_name} eliminados correctamente.` });
+        } else {
+            // Eliminar archivo por completo
+            fs.writeFileSync(filePath, JSON.stringify([], null, 2));
+            res.json({ success: true, message: "Todos los registros por cliente se eliminaron." });
+        }
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Endpoint para revisar y extraer una cotización individual de Volper Seal
+app.get('/api/review-quotation/:number', async (req, res) => {
+    let number = req.params.number.trim();
+    if (!number.startsWith('COT-')) {
+        number = 'COT-' + number;
+    }
+
+    try {
+        const creds = getSavedCredentials();
+        const email = creds.ventasEmail;
+        const password = creds.ventasPassword;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: "Faltan configurar las credenciales de Ventas/Administrador." });
+        }
+
+        // Asegurar login con las credenciales de ventas
+        await login(email, password);
+
+        // Extraer la parte numérica para usarla directamente como ID (ej: "COT-1525" o "1525" -> "1525")
+        const quotId = number.replace(/\D/g, '');
+        if (!quotId) {
+            return res.status(400).json({ error: "El formato de número de cotización no es válido." });
+        }
+
+        // Obtener el detalle de la cotización directamente por su ID numérico
+        const detailResponse = await client.get(`/quotations/record/${quotId}`);
+        
+        if (typeof detailResponse.data === 'string' && detailResponse.data.includes('<html')) {
+            throw new Error("Sesión expirada o denegada en Volper Seal.");
+        }
+
+        const detail = detailResponse.data.data;
+
+        if (!detail || !detail.quotation) {
+            return res.status(404).json({ error: `No se encontró la cotización ${number} en el servidor.` });
+        }
+
+        let documentRef = "";
+        if (detail.documents && detail.documents.length > 0) {
+            documentRef = detail.documents[0].number_full;
+        } else if (detail.sale_notes && detail.sale_notes.length > 0) {
+            documentRef = detail.sale_notes[0].number_full;
+        } else if (detail.quotation && detail.quotation.documents && detail.quotation.documents.length > 0) {
+            documentRef = detail.quotation.documents[0].number_full;
+        } else if (detail.quotation && detail.quotation.sale_notes && detail.quotation.sale_notes.length > 0) {
+            documentRef = detail.quotation.sale_notes[0].number_full;
+        }
+
+        const isBilled = documentRef ? true : false;
+
+        const items = [];
+        if (detail.quotation.items) {
+            detail.quotation.items.forEach(line => {
+                items.push({
+                    customer_name: detail.quotation.customer.name || "Sin nombre",
+                    customer_number: detail.quotation.customer.number || "Sin número",
+                    number_full: detail.number_full,
+                    date_of_issue: detail.date_of_issue,
+                    internal_id: line.item.internal_id || "SIN-CODIGO",
+                    item_description: line.item.description || "Sin descripción",
+                    quantity: parseFloat(line.quantity) || 0,
+                    sale_unit_price: parseFloat(line.item.sale_unit_price) || 0,
+                    unit_price: parseFloat(line.unit_price) || 0,
+                    total: parseFloat(line.total) || 0,
+                    is_billed: isBilled,
+                    document_ref: documentRef
+                });
+            });
+        }
+
+        // Guardar asíncronamente en customer_quotations.json para actualizar el historial local
+        const filePath = path.join(__dirname, 'customer_quotations.json');
+        let existingRecords = [];
+        if (fs.existsSync(filePath)) {
+            try {
+                existingRecords = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            } catch (e) {}
+        }
+
+        const mergedMap = {};
+        existingRecords.forEach(r => {
+            const key = `${r.number_full}-${r.internal_id}`;
+            mergedMap[key] = r;
+        });
+
+        items.forEach(r => {
+            const key = `${r.number_full}-${r.internal_id}`;
+            mergedMap[key] = r;
+        });
+
+        fs.writeFileSync(filePath, JSON.stringify(Object.values(mergedMap), null, 2));
+
+        res.json({
+            success: true,
+            number_full: detail.number_full,
+            date_of_issue: detail.date_of_issue,
+            customer_name: detail.quotation.customer.name,
+            customer_number: detail.quotation.customer.number,
+            items: items
+        });
+
+    } catch (e) {
+        console.error("Error al revisar cotización:", e.message);
+        res.status(500).json({ error: e.message });
+    }
 });
 
 // Obtener todas las cotizaciones (sin los items, para que sea rápido)
@@ -632,8 +829,8 @@ app.get('/api/quotations/:number', async (req, res) => {
             dataArray.forEach(p => {
                 const whName = p.warehouse_name || '';
                 const isVentas = ventasNames.some(vn => vn.toLowerCase() === whName.toLowerCase()) ||
-                                 whName.toLowerCase().includes('principal') ||
-                                 whName.toLowerCase().includes('ventas');
+                    whName.toLowerCase().includes('principal') ||
+                    whName.toLowerCase().includes('ventas');
                 if (!isVentas) {
                     stockMap[p.internal_id] = (stockMap[p.internal_id] || 0) + p.stock;
                 }
@@ -643,8 +840,8 @@ app.get('/api/quotations/:number', async (req, res) => {
             dbProducts.forEach(p => {
                 const whName = p.warehouse || '';
                 const isVentas = ventasNames.some(vn => vn.toLowerCase() === whName.toLowerCase()) ||
-                                 whName.toLowerCase().includes('principal') ||
-                                 whName.toLowerCase().includes('ventas');
+                    whName.toLowerCase().includes('principal') ||
+                    whName.toLowerCase().includes('ventas');
                 if (!isVentas) {
                     stockMap[p.internal_id] = p.stock;
                 } else {
