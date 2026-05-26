@@ -48,18 +48,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const data = await res.json();
 
                 const filterWH = document.getElementById('filterWarehouse');
+                const filterMovWH = document.getElementById('filterMovimientosWarehouse');
+                const trasTargetWH = document.getElementById('trasTargetWarehouse');
+                
                 if (filterWH) filterWH.innerHTML = '<option value="all">Todos los almacenes</option>';
+                if (filterMovWH) filterMovWH.innerHTML = '<option value="all">Todos los almacenes</option>';
+                if (trasTargetWH) trasTargetWH.innerHTML = '<option value="">-- Seleccionar --</option>';
 
                 data.forEach(wh => {
                     window.warehouseAliasesByName[wh.name] = wh.alias;
                     window.warehouseAliasesById[wh.id] = wh.alias;
 
-                    if (filterWH) {
-                        const option = document.createElement('option');
-                        option.value = wh.alias;
-                        option.textContent = wh.alias;
-                        filterWH.appendChild(option);
-                    }
+                    if (filterWH) filterWH.insertAdjacentHTML('beforeend', `<option value="${wh.alias}">${wh.alias}</option>`);
+                    if (filterMovWH) filterMovWH.insertAdjacentHTML('beforeend', `<option value="${wh.alias}">${wh.alias}</option>`);
+                    if (trasTargetWH) trasTargetWH.insertAdjacentHTML('beforeend', `<option value="${wh.id}">${wh.alias}</option>`);
                 });
             }
         } catch (e) {
@@ -115,6 +117,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Iniciar de inmediato
     inicializarApp();
+
+    // Actualizar Kardex
+    $(document).on('click', '#btnRefreshKardex', function () {
+        const btn = $(this);
+        btn.prop('disabled', true).text('⏳ Actualizando...');
+        if (window.tableKardex) {
+            window.tableKardex.ajax.reload(function () {
+                btn.prop('disabled', false).text('🔄 Actualizar Kardex');
+                window.showToast("Kardex actualizado", "success");
+            });
+        }
+    });
 
     // Evento de submit para guardar la configuración de credenciales
     $(document).on('submit', '#formConfigCredentials', async function (e) {
@@ -237,6 +251,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     let table, tableMovimientos, tableWarehouses, tableCatalog, tableQuotations;
+    window.tableKardex = null;
 
     // Agregar función de filtrado para Cotizaciones por Cliente
     $.fn.dataTable.ext.search.push(
@@ -286,6 +301,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     );
 
+    // Agregar función de filtrado personalizada para Movimientos
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex, rowData, counter) {
+            if (settings.nTable.id !== 'movimientosTable') return true;
+
+            const whFilter = $('#filterMovimientosWarehouse').val();
+            const stockFilter = $('#filterMovimientosStock').val();
+
+            let resolvedAlias = "";
+            if (rowData && rowData.warehouse_description) {
+                resolvedAlias = window.warehouseAliasesById[rowData.warehouse_id] ||
+                    (rowData.warehouse_description.includes(' - ') ? rowData.warehouse_description.split(' - ')[1].trim() : rowData.warehouse_description);
+            }
+
+            let passWarehouse = true;
+            if (whFilter && whFilter !== 'all') {
+                passWarehouse = (resolvedAlias === whFilter);
+            }
+
+            const stockValue = parseFloat(rowData.stock) || 0;
+            let passStock = true;
+
+            if (stockFilter === '>0') passStock = (stockValue > 0);
+            else if (stockFilter === '<0') passStock = (stockValue < 0);
+            else if (stockFilter === '!=0') passStock = (stockValue !== 0);
+            else if (stockFilter === '=0') passStock = (stockValue === 0);
+
+            return passWarehouse && passStock;
+        }
+    );
+
     // Agregar función de filtrado para Cotizaciones
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex, rowData, counter) {
@@ -315,6 +361,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Eventos para redibujar la tabla al cambiar filtros
         $('#filterWarehouse, #filterStock').on('change', function () {
             if (table) table.draw();
+        });
+
+        $('#filterMovimientosWarehouse, #filterMovimientosStock').on('change', function () {
+            if (tableMovimientos) tableMovimientos.draw();
         });
 
         $('#filterQuotationStatus, #filterQuotationCustomer').on('change', function () {
@@ -416,12 +466,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return `<button class="btn btn-primary btn-ingreso" style="padding: 5px 10px; font-size: 0.8rem;" 
+                        return `<div style="display:flex;gap:5px;">
+                                <button class="btn btn-primary btn-ingreso" style="padding: 5px 10px; font-size: 0.8rem;" 
                                 data-item_id="${row.item_id}" 
                                 data-item_code="${row.item_internal_id}" 
                                 data-item_desc="${row.item_description}" 
                                 data-wh_id="${row.warehouse_id}" 
-                                data-wh_desc="${row.warehouse_description}">➕ Ingreso</button>`;
+                                data-wh_desc="${row.warehouse_description}">➕ Ingreso</button>
+                                <button class="btn btn-secondary btn-traslado" style="padding: 5px 10px; font-size: 0.8rem; background-color:#6c757d; border:none; color:white;" 
+                                data-item_id="${row.item_id}" 
+                                data-item_code="${row.item_internal_id}" 
+                                data-item_desc="${row.item_description}" 
+                                data-wh_id="${row.warehouse_id}" 
+                                data-wh_desc="${row.warehouse_description}"
+                                data-stock="${row.stock}">🔄 Traslado</button></div>`;
                     }
                 }
             ],
@@ -442,6 +500,55 @@ document.addEventListener('DOMContentLoaded', async () => {
             stateSave: true,
             pageLength: 20,
             lengthMenu: [20, 50, 100],
+            scrollX: true
+        });
+
+        // --- KARDEX DE INGRESOS ---
+        window.tableKardex = $('#kardexTable').DataTable({
+            ajax: {
+                url: '/api/kardex',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'date', defaultContent: '' },
+                { data: 'item_code', defaultContent: '' },
+                { data: 'item_description', defaultContent: '' },
+                { data: 'warehouse_description', defaultContent: '' },
+                { data: 'initial_stock', defaultContent: '0' },
+                { 
+                    data: 'added_quantity', 
+                    defaultContent: '0', 
+                    render: function(d) { return `<span style="color:#2ecc71;font-weight:bold;">+${d}</span>`; } 
+                },
+                { data: 'final_stock', defaultContent: '0' },
+                { data: 'comments', defaultContent: '' }
+            ],
+            language: {
+                search: "Buscar:",
+                lengthMenu: "Mostrar _MENU_ registros",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                paginate: { first: "Primero", last: "Último", next: "Siguiente", previous: "Anterior" },
+                loadingRecords: "Cargando kardex...",
+                zeroRecords: "No hay movimientos registrados",
+                emptyTable: "Aún no hay ingresos locales en el kardex"
+            },
+            order: [[0, 'desc']],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '📥 Exportar a Excel',
+                    className: 'btn btn-success btn-dt-export',
+                    title: 'Kardex de Ingresos Volper'
+                },
+                {
+                    extend: 'print',
+                    text: '🖨️ Imprimir',
+                    className: 'btn btn-primary btn-dt-export',
+                    title: 'Kardex de Ingresos Volper'
+                }
+            ],
+            pageLength: 20,
             scrollX: true
         });
 
@@ -860,7 +967,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             warehouse_id: $('#ingWarehouse_id').val(),
             quantity: $('#ingQuantity').val(),
             inventory_transaction_id: $('#ingTransactionId').val(),
-            comments: $('#ingComments').val()
+            comments: $('#ingComments').val(),
+            
+            // Datos extra para el historial Kardex
+            item_code: clickedRowRef ? clickedRowRef.data().item_internal_id : '',
+            item_description: clickedRowRef ? clickedRowRef.data().item_description : '',
+            warehouse_description: clickedRowRef ? (window.warehouseAliasesById[$('#ingWarehouse_id').val()] || $('#ingWarehouseName').val()) : '',
+            initial_stock: clickedRowRef ? clickedRowRef.data().stock : 0
         };
 
         try {
@@ -893,6 +1006,98 @@ document.addEventListener('DOMContentLoaded', async () => {
         } finally {
             btn.prop('disabled', false).text('Aceptar');
             isSubmitting = false; // Resetear guardia
+        }
+    });
+
+    // Modal Traslado Logic
+    $('#movimientosTable').on('click', '.btn-traslado', function () {
+        const btn = $(this);
+        clickedRowRef = tableMovimientos.row(btn.parents('tr'));
+
+        const item_id = btn.data('item_id');
+        const item_code = btn.data('item_code');
+        const item_desc = btn.data('item_desc');
+        const wh_id = btn.data('wh_id');
+        const wh_desc = btn.data('wh_desc');
+        const stock = parseFloat(btn.data('stock')) || 0;
+
+        $('#trasItem_id').val(item_id);
+        $('#trasItemName').val(`${item_code} - ${item_desc}`);
+        $('#trasWarehouse_id').val(wh_id);
+        $('#trasWarehouseName').val(wh_desc);
+        $('#trasStockCurrent').val(stock);
+        $('#trasMaxQty').text(stock);
+        
+        $('#trasQuantity').val('').attr('max', stock);
+        $('#trasTargetWarehouse').val('');
+        $('#trasComments').val('');
+
+        $('#modalTraslado').css('display', 'flex');
+    });
+
+    $('#formTraslado').submit(async function (e) {
+        e.preventDefault();
+        if (isSubmitting) return;
+        
+        const qty = parseFloat($('#trasQuantity').val());
+        const maxQty = parseFloat($('#trasStockCurrent').val());
+        if (qty > maxQty) {
+            window.showToast("La cantidad supera el stock actual", "error");
+            return;
+        }
+
+        isSubmitting = true;
+        const btn = $('#btnSubmitTraslado');
+        btn.prop('disabled', true).text('Trasladando...');
+
+        const payload = {
+            id: null,
+            item_id: $('#trasItem_id').val(),
+            warehouse_id: $('#trasWarehouse_id').val(),
+            quantity: maxQty, // stock original
+            warehouse_new_id: $('#trasTargetWarehouse').val(),
+            quantity_move: qty,
+            quantity_real: maxQty - qty,
+            lots_enabled: false,
+            series_enabled: false,
+            lots: [],
+            lots_group: [],
+            detail: $('#trasComments').val() || "Traslado desde dashboard",
+            
+            // Para el Kardex
+            item_code: clickedRowRef ? clickedRowRef.data().item_internal_id : '',
+            item_description: clickedRowRef ? clickedRowRef.data().item_description : '',
+            warehouse_description: clickedRowRef ? (window.warehouseAliasesById[$('#trasWarehouse_id').val()] || $('#trasWarehouseName').val()) : '',
+            target_warehouse_description: window.warehouseAliasesById[$('#trasTargetWarehouse').val()] || ''
+        };
+
+        try {
+            const res = await window.fetchWithAuth('/api/move-transaction', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                window.showToast("Traslado registrado exitosamente", "success");
+
+                if (clickedRowRef) {
+                    const rowData = clickedRowRef.data();
+                    rowData.stock = (parseFloat(rowData.stock) || 0) - qty;
+                    clickedRowRef.data(rowData).draw(false);
+                }
+
+                setTimeout(() => {
+                    $('#modalTraslado').css('display', 'none');
+                }, 1500);
+            } else {
+                window.showToast(data.error || "Error al registrar traslado", "error");
+            }
+        } catch (error) {
+            window.showToast("Error de conexión", "error");
+        } finally {
+            isSubmitting = false;
+            btn.prop('disabled', false).text('Trasladar');
         }
     });
 

@@ -771,7 +771,32 @@ app.post('/api/add-transaction', async (req, res) => {
         });
 
         if (response.data && response.data.success !== false) {
-            res.json({ success: true, message: "Ingreso registrado correctamente." });
+            
+            // Guardar en Kardex local
+            const kardexPath = path.join(__dirname, 'kardex_ingresos.json');
+            let kardexData = [];
+            if (fs.existsSync(kardexPath)) {
+                try { kardexData = JSON.parse(fs.readFileSync(kardexPath, 'utf8')); } catch(e){}
+            }
+
+            const kardexRecord = {
+                id: Date.now(),
+                date: new Date().toLocaleString('es-PE', { timeZone: 'America/Lima' }),
+                item_id,
+                item_code: req.body.item_code || '',
+                item_description: req.body.item_description || '',
+                warehouse_id,
+                warehouse_description: req.body.warehouse_description || '',
+                initial_stock: parseFloat(req.body.initial_stock) || 0,
+                added_quantity: parseFloat(quantity) || 0,
+                final_stock: (parseFloat(req.body.initial_stock) || 0) + (parseFloat(quantity) || 0),
+                comments: comments || ''
+            };
+
+            kardexData.push(kardexRecord);
+            fs.writeFileSync(kardexPath, JSON.stringify(kardexData, null, 2));
+
+            res.json({ success: true, message: "Ingreso registrado correctamente y guardado en el kardex." });
         } else {
             res.status(400).json({ success: false, error: response.data.message || "Error al registrar ingreso." });
         }
@@ -781,6 +806,112 @@ app.post('/api/add-transaction', async (req, res) => {
         }
         console.error(error);
         res.status(500).json({ success: false, error: error.message });
+    }
+});
+// Ruta para registrar un traslado
+app.post('/api/move-transaction', async (req, res) => {
+    const { 
+        id, item_id, item_code, item_description, warehouse_id, warehouse_description, 
+        quantity, warehouse_new_id, quantity_move, quantity_real, 
+        lots_enabled, series_enabled, lots, lots_group, detail, target_warehouse_description 
+    } = req.body;
+
+    if (!item_id || !warehouse_id || !warehouse_new_id || !quantity_move) {
+        return res.status(400).json({ success: false, error: "Faltan datos obligatorios para el traslado" });
+    }
+
+    const creds = getSavedCredentials();
+    if (!creds.almacenEmail || !creds.almacenPassword) {
+        return res.status(400).json({ success: false, error: "Faltan configurar las credenciales de Almacén." });
+    }
+
+    try {
+        await login(creds.almacenEmail, creds.almacenPassword);
+
+        // Obtener la página de inventario para capturar el token CSRF
+        const invPage = await client.get('/inventory');
+        const $ = cheerio.load(invPage.data);
+        const csrfToken = $('meta[name="csrf-token"]').attr('content') || $('input[name="_token"]').val();
+
+        if (!csrfToken) {
+            throw new Error("No se pudo obtener el token CSRF de la sesión.");
+        }
+
+        const payload = {
+            id: id || null,
+            item_id: parseInt(item_id),
+            item_description: item_description || "",
+            warehouse_id: parseInt(warehouse_id),
+            warehouse_description: warehouse_description || "",
+            quantity: parseFloat(quantity) || 0,
+            warehouse_new_id: parseInt(warehouse_new_id),
+            quantity_move: String(quantity_move),
+            quantity_real: parseFloat(quantity_real) || 0,
+            lots_enabled: lots_enabled || false,
+            series_enabled: series_enabled || false,
+            lots: lots || [],
+            lots_group: lots_group || [],
+            detail: detail || ""
+        };
+
+        const response = await client.post('/inventory/move', payload, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        if (response.data && response.data.success !== false) {
+            
+            // Guardar en Kardex local (Salida del almacén origen)
+            const kardexPath = path.join(__dirname, 'kardex_ingresos.json');
+            let kardexData = [];
+            if (fs.existsSync(kardexPath)) {
+                try { kardexData = JSON.parse(fs.readFileSync(kardexPath, 'utf8')); } catch(e){}
+            }
+
+            const kardexRecord = {
+                id: Date.now(),
+                date: new Date().toLocaleString('es-PE', { timeZone: 'America/Lima' }),
+                item_id,
+                item_code: item_code || '',
+                item_description: item_description || '',
+                warehouse_id,
+                warehouse_description: warehouse_description || '',
+                initial_stock: parseFloat(quantity) || 0,
+                added_quantity: -parseFloat(quantity_move), // Negativo porque es una salida por traslado
+                final_stock: parseFloat(quantity_real) || 0,
+                comments: `Traslado hacia: ${target_warehouse_description || warehouse_new_id} | ${detail || ''}`
+            };
+
+            kardexData.push(kardexRecord);
+            fs.writeFileSync(kardexPath, JSON.stringify(kardexData, null, 2));
+
+            res.json({ success: true, message: "Traslado registrado correctamente y guardado en el kardex." });
+        } else {
+            res.status(400).json({ success: false, error: response.data.message || "Error al registrar traslado." });
+        }
+    } catch (error) {
+        if (error.message === "Credenciales inválidas") {
+            return res.status(401).json({ success: false, error: "Credenciales de Almacén incorrectas." });
+        }
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Endpoint para obtener el Kardex de ingresos
+app.get('/api/kardex', (req, res) => {
+    const kardexPath = path.join(__dirname, 'kardex_ingresos.json');
+    if (fs.existsSync(kardexPath)) {
+        try {
+            const data = JSON.parse(fs.readFileSync(kardexPath, 'utf8'));
+            res.json(data);
+        } catch (e) {
+            res.status(500).json({ error: "Error leyendo el archivo kardex" });
+        }
+    } else {
+        res.json([]);
     }
 });
 

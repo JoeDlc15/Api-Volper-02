@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS de DataTables y Estilos -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
         .badge {
@@ -190,6 +191,12 @@
                         <a href="#" class="nav-link" data-target="view-movimientos">
                             <span class="menu-icon">🔁</span>
                             <span class="menu-text">Movimientos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link" data-target="view-kardex">
+                            <span class="menu-icon">📊</span>
+                            <span class="menu-text">Kardex Ingresos</span>
                         </a>
                     </li>
                     <li>
@@ -583,6 +590,28 @@
                         <button id="btnUpdateMovimientos" class="btn btn-primary">🔄 Extraer Movimientos</button>
                     </div>
                     <hr>
+                    <div class="filters-container"
+                        style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+                        <div class="filter-group">
+                            <label for="filterMovimientosWarehouse"
+                                style="margin-right: 10px; font-weight: bold; color: #2c3e50;">🏢 Almacén:</label>
+                            <select id="filterMovimientosWarehouse" class="form-control"
+                                style="width: auto; display: inline-block;">
+                                <option value="all">Todos los almacenes</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterMovimientosStock" style="margin-right: 10px; font-weight: bold; color: #2c3e50;">📦
+                                Stock:</label>
+                            <select id="filterMovimientosStock" class="form-control" style="width: auto; display: inline-block;">
+                                <option value="all">Todos</option>
+                                <option value=">0">Mayor a 0 (> 0)</option>
+                                <option value="<0">Menor a 0 (< 0)</option>
+                                <option value="!=0">Diferente de 0 (≠ 0)</option>
+                                <option value="=0">Igual a 0 (= 0)</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-container">
                         <table id="movimientosTable" class="display nowrap" style="width:100%">
                             <thead>
@@ -645,6 +674,55 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-close close-modal">Cancelar</button>
                                     <button type="submit" id="btnSubmitIngreso" class="btn btn-primary">Aceptar</button>
+                                </div>
+                            </form>
+                        </div>
+                </div>
+
+                <!-- Modal for Traslado -->
+                <div id="modalTraslado" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Traslado de producto entre almacenes</h2>
+                            <span class="close-modal">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formTraslado">
+                                <input type="hidden" id="trasItem_id">
+                                <input type="hidden" id="trasWarehouse_id">
+                                <input type="hidden" id="trasStockCurrent">
+
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 3;">
+                                        <label>Producto</label>
+                                        <input type="text" id="trasItemName" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group" style="flex: 1; min-width: 100px;">
+                                        <label>Cantidad (Max: <span id="trasMaxQty">0</span>)</label>
+                                        <input type="number" id="trasQuantity" class="form-control" step="0.01" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Almacén Origen</label>
+                                    <input type="text" id="trasWarehouseName" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Almacén Destino</label>
+                                    <select id="trasTargetWarehouse" class="form-control" required>
+                                        <option value="">-- Seleccionar --</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Comentarios / Motivo</label>
+                                    <textarea id="trasComments" class="form-control" rows="2"></textarea>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-close close-modal">Cancelar</button>
+                                    <button type="submit" id="btnSubmitTraslado" class="btn btn-primary">Trasladar</button>
                                 </div>
                             </form>
                         </div>
@@ -915,12 +993,48 @@
             </div>
             </section>
 
+            <!-- View: Kardex de Ingresos -->
+            <section id="view-kardex" class="view-section">
+                <div class="container">
+                    <div class="header-actions">
+                        <div>
+                            <h1>📊 Kardex de Ingresos</h1>
+                            <div class="status-msg">Historial local de ingresos generados al inventario.</div>
+                        </div>
+                        <button id="btnRefreshKardex" class="btn btn-primary">🔄 Actualizar Kardex</button>
+                    </div>
+                    <hr>
+                    <div class="table-container">
+                        <table id="kardexTable" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha y Hora</th>
+                                    <th>Código</th>
+                                    <th>Descripción</th>
+                                    <th>Almacén</th>
+                                    <th>Stock Inicial</th>
+                                    <th>Ingreso</th>
+                                    <th>Stock Final</th>
+                                    <th>Comentarios</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data loaded via AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div> <!-- End App Container -->
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>

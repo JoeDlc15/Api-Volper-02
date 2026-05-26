@@ -662,3 +662,6 @@ td.details-control:hover {
 .history-child-table tr:hover:not(.highlight-same-client) {
     background-color: #f7fafc;
 }
+
+.btn-dt-export { margin-bottom: 15px; margin-right: 10px; border-radius: 6px; font-weight: bold; } 
+.dt-buttons { margin-bottom: 15px; }
