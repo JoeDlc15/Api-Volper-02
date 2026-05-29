@@ -949,7 +949,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     $('.close-modal').click(function () {
-        $('#modalIngreso').css('display', 'none');
+        $(this).closest('.modal').css('display', 'none');
     });
 
     let isSubmitting = false;
@@ -1087,6 +1087,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     clickedRowRef.data(rowData).draw(false);
                 }
 
+                // Actualizar la fila destino (sumar)
+                const targetWhId = $('#trasTargetWarehouse').val();
+                const itemId = $('#trasItem_id').val();
+                
+                tableMovimientos.rows().every(function () {
+                    const d = this.data();
+                    if (String(d.item_id) === String(itemId) && String(d.warehouse_id) === String(targetWhId)) {
+                        d.stock = (parseFloat(d.stock) || 0) + qty;
+                        this.data(d).draw(false);
+                    }
+                });
+                
                 setTimeout(() => {
                     $('#modalTraslado').css('display', 'none');
                 }, 1500);

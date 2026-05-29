@@ -790,11 +790,31 @@ app.post('/api/add-transaction', async (req, res) => {
                 initial_stock: parseFloat(req.body.initial_stock) || 0,
                 added_quantity: parseFloat(quantity) || 0,
                 final_stock: (parseFloat(req.body.initial_stock) || 0) + (parseFloat(quantity) || 0),
-                comments: comments || ''
+                comments: comments || 'Ingreso de Producción'
             };
 
             kardexData.push(kardexRecord);
             fs.writeFileSync(kardexPath, JSON.stringify(kardexData, null, 2));
+
+            // Actualizar movimiento.json localmente para que persista al dar F5
+            const movPath = path.join(__dirname, 'movimiento.json');
+            if (fs.existsSync(movPath)) {
+                try {
+                    const movRaw = fs.readFileSync(movPath, 'utf8');
+                    const movParsed = JSON.parse(movRaw);
+                    const movArray = movParsed.data ? movParsed.data : movParsed;
+                    
+                    const addedQty = parseFloat(quantity) || 0;
+                    for (let item of movArray) {
+                        if (String(item.item_id) === String(item_id) && String(item.warehouse_id) === String(warehouse_id)) {
+                            item.stock = (parseFloat(item.stock) || 0) + addedQty;
+                        }
+                    }
+                    fs.writeFileSync(movPath, JSON.stringify(movParsed, null, 2));
+                } catch(e) {
+                    console.error("Error updating movimiento.json cache", e);
+                }
+            }
 
             res.json({ success: true, message: "Ingreso registrado correctamente y guardado en el kardex." });
         } else {
@@ -886,6 +906,31 @@ app.post('/api/move-transaction', async (req, res) => {
 
             kardexData.push(kardexRecord);
             fs.writeFileSync(kardexPath, JSON.stringify(kardexData, null, 2));
+
+            // Actualizar movimiento.json localmente para que persista al dar F5
+            const movPath = path.join(__dirname, 'movimiento.json');
+            if (fs.existsSync(movPath)) {
+                try {
+                    const movRaw = fs.readFileSync(movPath, 'utf8');
+                    const movParsed = JSON.parse(movRaw);
+                    const movArray = movParsed.data ? movParsed.data : movParsed;
+                    
+                    const movedQty = parseFloat(quantity_move) || 0;
+                    for (let item of movArray) {
+                        // Restar del origen
+                        if (String(item.item_id) === String(item_id) && String(item.warehouse_id) === String(warehouse_id)) {
+                            item.stock = (parseFloat(item.stock) || 0) - movedQty;
+                        }
+                        // Sumar al destino
+                        if (String(item.item_id) === String(item_id) && String(item.warehouse_id) === String(warehouse_new_id)) {
+                            item.stock = (parseFloat(item.stock) || 0) + movedQty;
+                        }
+                    }
+                    fs.writeFileSync(movPath, JSON.stringify(movParsed, null, 2));
+                } catch(e) {
+                    console.error("Error updating movimiento.json cache for move", e);
+                }
+            }
 
             res.json({ success: true, message: "Traslado registrado correctamente y guardado en el kardex." });
         } else {
